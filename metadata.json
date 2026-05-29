@@ -1,0 +1,6 @@
+{
+  "name": "Allin OS",
+  "description": "Enterprise operating system for MLM, e-commerce, finance, and intelligent operations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
