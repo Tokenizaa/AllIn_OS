@@ -9,14 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
+import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as OfficeRouteImport } from './routes/office'
+import { Route as LojaRouteImport } from './routes/loja'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as DistribuidoresRouteImport } from './routes/distribuidores'
+import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as AtivacaoRouteImport } from './routes/ativacao'
 import { Route as AppRouteImport } from './routes/_app'
+import { Route as PublicIndexRouteImport } from './routes/public.index'
 import { Route as OfficeIndexRouteImport } from './routes/office/index'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as PublicLojaRouteImport } from './routes/public.loja'
+import { Route as PublicDistribuidoresRouteImport } from './routes/public.distribuidores'
 import { Route as OfficeStoreRouteImport } from './routes/office/store'
 import { Route as OfficePlanRouteImport } from './routes/office/plan'
 import { Route as OfficeOrdersRouteImport } from './routes/office/orders'
 import { Route as OfficeFinanceRouteImport } from './routes/office/finance'
+import { Route as LojaStoreSlugRouteImport } from './routes/loja.$storeSlug'
 import { Route as AppWalletsRouteImport } from './routes/_app/wallets'
 import { Route as AppSystemRouteImport } from './routes/_app/system'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
@@ -31,15 +42,57 @@ import { Route as AppAlertsRouteImport } from './routes/_app/alerts'
 import { Route as AppProductsIndexRouteImport } from './routes/_app/products/index'
 import { Route as AppOrdersIndexRouteImport } from './routes/_app/orders/index'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app/customers/index'
+import { Route as PublicLojaStoreSlugRouteImport } from './routes/public.loja.$storeSlug'
+import { Route as AuthInviteTokenRouteImport } from './routes/auth.invite.$token'
 import { Route as AppCustomersIdRouteImport } from './routes/_app/customers/$id'
 
+const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
+  id: '/redefinir-senha',
+  path: '/redefinir-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecuperarSenhaRoute = RecuperarSenhaRouteImport.update({
+  id: '/recuperar-senha',
+  path: '/recuperar-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OfficeRoute = OfficeRouteImport.update({
   id: '/office',
   path: '/office',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LojaRoute = LojaRouteImport.update({
+  id: '/loja',
+  path: '/loja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DistribuidoresRoute = DistribuidoresRouteImport.update({
+  id: '/distribuidores',
+  path: '/distribuidores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastroRoute = CadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AtivacaoRoute = AtivacaoRouteImport.update({
+  id: '/ativacao',
+  path: '/ativacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
+  id: '/public/',
+  path: '/public/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OfficeIndexRoute = OfficeIndexRouteImport.update({
@@ -51,6 +104,16 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const PublicLojaRoute = PublicLojaRouteImport.update({
+  id: '/public/loja',
+  path: '/public/loja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicDistribuidoresRoute = PublicDistribuidoresRouteImport.update({
+  id: '/public/distribuidores',
+  path: '/public/distribuidores',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const OfficeStoreRoute = OfficeStoreRouteImport.update({
   id: '/store',
@@ -71,6 +134,11 @@ const OfficeFinanceRoute = OfficeFinanceRouteImport.update({
   id: '/finance',
   path: '/finance',
   getParentRoute: () => OfficeRoute,
+} as any)
+const LojaStoreSlugRoute = LojaStoreSlugRouteImport.update({
+  id: '/$storeSlug',
+  path: '/$storeSlug',
+  getParentRoute: () => LojaRoute,
 } as any)
 const AppWalletsRoute = AppWalletsRouteImport.update({
   id: '/wallets',
@@ -142,6 +210,16 @@ const AppCustomersIndexRoute = AppCustomersIndexRouteImport.update({
   path: '/customers/',
   getParentRoute: () => AppRoute,
 } as any)
+const PublicLojaStoreSlugRoute = PublicLojaStoreSlugRouteImport.update({
+  id: '/$storeSlug',
+  path: '/$storeSlug',
+  getParentRoute: () => PublicLojaRoute,
+} as any)
+const AuthInviteTokenRoute = AuthInviteTokenRouteImport.update({
+  id: '/auth/invite/$token',
+  path: '/auth/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppCustomersIdRoute = AppCustomersIdRouteImport.update({
   id: '/customers/$id',
   path: '/customers/$id',
@@ -150,7 +228,14 @@ const AppCustomersIdRoute = AppCustomersIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
+  '/ativacao': typeof AtivacaoRoute
+  '/cadastro': typeof CadastroRoute
+  '/distribuidores': typeof DistribuidoresRoute
+  '/login': typeof LoginRoute
+  '/loja': typeof LojaRouteWithChildren
   '/office': typeof OfficeRouteWithChildren
+  '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/alerts': typeof AppAlertsRoute
   '/analytics': typeof AppAnalyticsRoute
   '/commissions': typeof AppCommissionsRoute
@@ -162,17 +247,30 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRoute
   '/system': typeof AppSystemRoute
   '/wallets': typeof AppWalletsRoute
+  '/loja/$storeSlug': typeof LojaStoreSlugRoute
   '/office/finance': typeof OfficeFinanceRoute
   '/office/orders': typeof OfficeOrdersRoute
   '/office/plan': typeof OfficePlanRoute
   '/office/store': typeof OfficeStoreRoute
+  '/public/distribuidores': typeof PublicDistribuidoresRoute
+  '/public/loja': typeof PublicLojaRouteWithChildren
   '/office/': typeof OfficeIndexRoute
+  '/public/': typeof PublicIndexRoute
   '/customers/$id': typeof AppCustomersIdRoute
+  '/auth/invite/$token': typeof AuthInviteTokenRoute
+  '/public/loja/$storeSlug': typeof PublicLojaStoreSlugRoute
   '/customers/': typeof AppCustomersIndexRoute
   '/orders/': typeof AppOrdersIndexRoute
   '/products/': typeof AppProductsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/ativacao': typeof AtivacaoRoute
+  '/cadastro': typeof CadastroRoute
+  '/distribuidores': typeof DistribuidoresRoute
+  '/login': typeof LoginRoute
+  '/loja': typeof LojaRouteWithChildren
+  '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/alerts': typeof AppAlertsRoute
   '/analytics': typeof AppAnalyticsRoute
   '/commissions': typeof AppCommissionsRoute
@@ -184,13 +282,19 @@ export interface FileRoutesByTo {
   '/settings': typeof AppSettingsRoute
   '/system': typeof AppSystemRoute
   '/wallets': typeof AppWalletsRoute
+  '/loja/$storeSlug': typeof LojaStoreSlugRoute
   '/office/finance': typeof OfficeFinanceRoute
   '/office/orders': typeof OfficeOrdersRoute
   '/office/plan': typeof OfficePlanRoute
   '/office/store': typeof OfficeStoreRoute
+  '/public/distribuidores': typeof PublicDistribuidoresRoute
+  '/public/loja': typeof PublicLojaRouteWithChildren
   '/': typeof AppIndexRoute
   '/office': typeof OfficeIndexRoute
+  '/public': typeof PublicIndexRoute
   '/customers/$id': typeof AppCustomersIdRoute
+  '/auth/invite/$token': typeof AuthInviteTokenRoute
+  '/public/loja/$storeSlug': typeof PublicLojaStoreSlugRoute
   '/customers': typeof AppCustomersIndexRoute
   '/orders': typeof AppOrdersIndexRoute
   '/products': typeof AppProductsIndexRoute
@@ -198,7 +302,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
+  '/ativacao': typeof AtivacaoRoute
+  '/cadastro': typeof CadastroRoute
+  '/distribuidores': typeof DistribuidoresRoute
+  '/login': typeof LoginRoute
+  '/loja': typeof LojaRouteWithChildren
   '/office': typeof OfficeRouteWithChildren
+  '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/_app/alerts': typeof AppAlertsRoute
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/commissions': typeof AppCommissionsRoute
@@ -210,13 +321,19 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRoute
   '/_app/system': typeof AppSystemRoute
   '/_app/wallets': typeof AppWalletsRoute
+  '/loja/$storeSlug': typeof LojaStoreSlugRoute
   '/office/finance': typeof OfficeFinanceRoute
   '/office/orders': typeof OfficeOrdersRoute
   '/office/plan': typeof OfficePlanRoute
   '/office/store': typeof OfficeStoreRoute
+  '/public/distribuidores': typeof PublicDistribuidoresRoute
+  '/public/loja': typeof PublicLojaRouteWithChildren
   '/_app/': typeof AppIndexRoute
   '/office/': typeof OfficeIndexRoute
+  '/public/': typeof PublicIndexRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
+  '/auth/invite/$token': typeof AuthInviteTokenRoute
+  '/public/loja/$storeSlug': typeof PublicLojaStoreSlugRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
   '/_app/orders/': typeof AppOrdersIndexRoute
   '/_app/products/': typeof AppProductsIndexRoute
@@ -225,7 +342,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ativacao'
+    | '/cadastro'
+    | '/distribuidores'
+    | '/login'
+    | '/loja'
     | '/office'
+    | '/recuperar-senha'
+    | '/redefinir-senha'
     | '/alerts'
     | '/analytics'
     | '/commissions'
@@ -237,17 +361,30 @@ export interface FileRouteTypes {
     | '/settings'
     | '/system'
     | '/wallets'
+    | '/loja/$storeSlug'
     | '/office/finance'
     | '/office/orders'
     | '/office/plan'
     | '/office/store'
+    | '/public/distribuidores'
+    | '/public/loja'
     | '/office/'
+    | '/public/'
     | '/customers/$id'
+    | '/auth/invite/$token'
+    | '/public/loja/$storeSlug'
     | '/customers/'
     | '/orders/'
     | '/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/ativacao'
+    | '/cadastro'
+    | '/distribuidores'
+    | '/login'
+    | '/loja'
+    | '/recuperar-senha'
+    | '/redefinir-senha'
     | '/alerts'
     | '/analytics'
     | '/commissions'
@@ -259,20 +396,33 @@ export interface FileRouteTypes {
     | '/settings'
     | '/system'
     | '/wallets'
+    | '/loja/$storeSlug'
     | '/office/finance'
     | '/office/orders'
     | '/office/plan'
     | '/office/store'
+    | '/public/distribuidores'
+    | '/public/loja'
     | '/'
     | '/office'
+    | '/public'
     | '/customers/$id'
+    | '/auth/invite/$token'
+    | '/public/loja/$storeSlug'
     | '/customers'
     | '/orders'
     | '/products'
   id:
     | '__root__'
     | '/_app'
+    | '/ativacao'
+    | '/cadastro'
+    | '/distribuidores'
+    | '/login'
+    | '/loja'
     | '/office'
+    | '/recuperar-senha'
+    | '/redefinir-senha'
     | '/_app/alerts'
     | '/_app/analytics'
     | '/_app/commissions'
@@ -284,13 +434,19 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/system'
     | '/_app/wallets'
+    | '/loja/$storeSlug'
     | '/office/finance'
     | '/office/orders'
     | '/office/plan'
     | '/office/store'
+    | '/public/distribuidores'
+    | '/public/loja'
     | '/_app/'
     | '/office/'
+    | '/public/'
     | '/_app/customers/$id'
+    | '/auth/invite/$token'
+    | '/public/loja/$storeSlug'
     | '/_app/customers/'
     | '/_app/orders/'
     | '/_app/products/'
@@ -298,11 +454,36 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
+  AtivacaoRoute: typeof AtivacaoRoute
+  CadastroRoute: typeof CadastroRoute
+  DistribuidoresRoute: typeof DistribuidoresRoute
+  LoginRoute: typeof LoginRoute
+  LojaRoute: typeof LojaRouteWithChildren
   OfficeRoute: typeof OfficeRouteWithChildren
+  RecuperarSenhaRoute: typeof RecuperarSenhaRoute
+  RedefinirSenhaRoute: typeof RedefinirSenhaRoute
+  PublicDistribuidoresRoute: typeof PublicDistribuidoresRoute
+  PublicLojaRoute: typeof PublicLojaRouteWithChildren
+  PublicIndexRoute: typeof PublicIndexRoute
+  AuthInviteTokenRoute: typeof AuthInviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/redefinir-senha': {
+      id: '/redefinir-senha'
+      path: '/redefinir-senha'
+      fullPath: '/redefinir-senha'
+      preLoaderRoute: typeof RedefinirSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recuperar-senha': {
+      id: '/recuperar-senha'
+      path: '/recuperar-senha'
+      fullPath: '/recuperar-senha'
+      preLoaderRoute: typeof RecuperarSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/office': {
       id: '/office'
       path: '/office'
@@ -310,11 +491,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfficeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/loja': {
+      id: '/loja'
+      path: '/loja'
+      fullPath: '/loja'
+      preLoaderRoute: typeof LojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/distribuidores': {
+      id: '/distribuidores'
+      path: '/distribuidores'
+      fullPath: '/distribuidores'
+      preLoaderRoute: typeof DistribuidoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ativacao': {
+      id: '/ativacao'
+      path: '/ativacao'
+      fullPath: '/ativacao'
+      preLoaderRoute: typeof AtivacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/public/': {
+      id: '/public/'
+      path: '/public'
+      fullPath: '/public/'
+      preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/office/': {
@@ -330,6 +553,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/public/loja': {
+      id: '/public/loja'
+      path: '/public/loja'
+      fullPath: '/public/loja'
+      preLoaderRoute: typeof PublicLojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/public/distribuidores': {
+      id: '/public/distribuidores'
+      path: '/public/distribuidores'
+      fullPath: '/public/distribuidores'
+      preLoaderRoute: typeof PublicDistribuidoresRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/office/store': {
       id: '/office/store'
@@ -358,6 +595,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/office/finance'
       preLoaderRoute: typeof OfficeFinanceRouteImport
       parentRoute: typeof OfficeRoute
+    }
+    '/loja/$storeSlug': {
+      id: '/loja/$storeSlug'
+      path: '/$storeSlug'
+      fullPath: '/loja/$storeSlug'
+      preLoaderRoute: typeof LojaStoreSlugRouteImport
+      parentRoute: typeof LojaRoute
     }
     '/_app/wallets': {
       id: '/_app/wallets'
@@ -457,6 +701,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCustomersIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/public/loja/$storeSlug': {
+      id: '/public/loja/$storeSlug'
+      path: '/$storeSlug'
+      fullPath: '/public/loja/$storeSlug'
+      preLoaderRoute: typeof PublicLojaStoreSlugRouteImport
+      parentRoute: typeof PublicLojaRoute
+    }
+    '/auth/invite/$token': {
+      id: '/auth/invite/$token'
+      path: '/auth/invite/$token'
+      fullPath: '/auth/invite/$token'
+      preLoaderRoute: typeof AuthInviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/customers/$id': {
       id: '/_app/customers/$id'
       path: '/customers/$id'
@@ -507,6 +765,16 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface LojaRouteChildren {
+  LojaStoreSlugRoute: typeof LojaStoreSlugRoute
+}
+
+const LojaRouteChildren: LojaRouteChildren = {
+  LojaStoreSlugRoute: LojaStoreSlugRoute,
+}
+
+const LojaRouteWithChildren = LojaRoute._addFileChildren(LojaRouteChildren)
+
 interface OfficeRouteChildren {
   OfficeFinanceRoute: typeof OfficeFinanceRoute
   OfficeOrdersRoute: typeof OfficeOrdersRoute
@@ -526,10 +794,43 @@ const OfficeRouteChildren: OfficeRouteChildren = {
 const OfficeRouteWithChildren =
   OfficeRoute._addFileChildren(OfficeRouteChildren)
 
+interface PublicLojaRouteChildren {
+  PublicLojaStoreSlugRoute: typeof PublicLojaStoreSlugRoute
+}
+
+const PublicLojaRouteChildren: PublicLojaRouteChildren = {
+  PublicLojaStoreSlugRoute: PublicLojaStoreSlugRoute,
+}
+
+const PublicLojaRouteWithChildren = PublicLojaRoute._addFileChildren(
+  PublicLojaRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
+  AtivacaoRoute: AtivacaoRoute,
+  CadastroRoute: CadastroRoute,
+  DistribuidoresRoute: DistribuidoresRoute,
+  LoginRoute: LoginRoute,
+  LojaRoute: LojaRouteWithChildren,
   OfficeRoute: OfficeRouteWithChildren,
+  RecuperarSenhaRoute: RecuperarSenhaRoute,
+  RedefinirSenhaRoute: RedefinirSenhaRoute,
+  PublicDistribuidoresRoute: PublicDistribuidoresRoute,
+  PublicLojaRoute: PublicLojaRouteWithChildren,
+  PublicIndexRoute: PublicIndexRoute,
+  AuthInviteTokenRoute: AuthInviteTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
