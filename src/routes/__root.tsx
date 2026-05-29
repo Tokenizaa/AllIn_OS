@@ -5,6 +5,8 @@ import {
   createRootRouteWithContext,
   useRouter,
   ScrollRestoration,
+  HeadContent,
+  Scripts,
 } from "@tanstack/react-router";
 
 import { AuthProvider } from "../lib/auth-context";
@@ -78,14 +80,24 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <DistributorProvider>
-          <Outlet />
-          <ScrollRestoration />
-        </DistributorProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <html lang="en">
+      <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <HeadContent />
+      </head>
+      <body className="dark bg-[#06080d] text-white">
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <DistributorProvider>
+              <Outlet />
+              <ScrollRestoration />
+            </DistributorProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+        <Scripts />
+      </body>
+    </html>
   );
 }
 
