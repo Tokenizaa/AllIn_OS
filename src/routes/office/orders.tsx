@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/distributor/stat-card";
 import { distOrders, formatBRL } from "@/lib/distributor-data";
+import { SectionBreadcrumbs } from "@/components/navigation/section-breadcrumbs";
 
 export const Route = createFileRoute("/office/orders")({ component: OrdersPage });
 
@@ -21,6 +22,12 @@ function OrdersPage() {
   const ticket = total / distOrders.length;
   return (
     <div className="space-y-6">
+      <SectionBreadcrumbs
+        items={[
+          { label: "Office", to: "/office" },
+          { label: "Pedidos" },
+        ]}
+      />
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Meus Pedidos</h1>
         <p className="text-sm text-muted-foreground">Acompanhe, filtre e gerencie todos os seus pedidos.</p>

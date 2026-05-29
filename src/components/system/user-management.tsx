@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth, User, UserRole } from "@/lib/auth-context";
+import { useAuth, User, UserRole, normalizeUserRole } from "@/lib/auth-context";
 import { 
   Users, Search, Shield, Filter, UserX, UserCheck, ShieldAlert,
   Fingerprint, Calendar, ArrowUpDown, ChevronLeft, ChevronRight, Ban
@@ -14,6 +14,8 @@ import { toast } from "sonner";
 // Translate role slug to corporate localized description
 export const getRoleLabel = (role: string): string => {
   const roles: Record<string, string> = {
+    admin: "Admin",
+    operator: "Operador",
     admin_master: "Admin Master",
     finance: "Diretor Financeiro",
     support: "Suporte Técnico",
@@ -32,10 +34,11 @@ export const getRoleLabel = (role: string): string => {
 };
 
 export const getRoleBadgeStyle = (role: string): string => {
-  if (role === "admin_master" || role === "gestão_admin") {
+  const normalized = normalizeUserRole(role);
+  if (normalized === "admin" || normalized === "admin_master" || normalized === "gestão_admin") {
     return "bg-rose-500/15 text-rose-400 border-rose-500/30";
   }
-  if (role === "finance" || role === "financeiro") {
+  if (normalized === "operator" || role === "finance" || role === "financeiro") {
     return "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
   }
   if (role === "support" || role === "suporte") {
@@ -131,7 +134,7 @@ export function UserManagement() {
       u.email.toLowerCase().includes(search.toLowerCase()) ||
       (u.phone && u.phone.includes(search));
     
-    const matchesRole = roleFilter === "all" || u.role === roleFilter;
+    const matchesRole = roleFilter === "all" || u.role === roleFilter || normalizeUserRole(u.role) === roleFilter;
     const matchesStatus = statusFilter === "all" || u.status === statusFilter;
 
     return matchesSearch && matchesRole && matchesStatus;
@@ -190,6 +193,10 @@ export function UserManagement() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todas as Roles</SelectItem>
+              <SelectItem value="admin">Admin</SelectItem>
+              <SelectItem value="operator">Operador</SelectItem>
+              <SelectItem value="distributor">Distribuidor MLM</SelectItem>
+              <SelectItem value="customer">Cliente Final</SelectItem>
               <SelectItem value="admin_master">Admin Master</SelectItem>
               <SelectItem value="gestão_admin">Gestão Admin</SelectItem>
               <SelectItem value="financeiro">Financeiro</SelectItem>
@@ -199,8 +206,6 @@ export function UserManagement() {
               <SelectItem value="analytics">Analytics</SelectItem>
               <SelectItem value="auditor">Auditor</SelectItem>
               <SelectItem value="operador">Operador (Staff)</SelectItem>
-              <SelectItem value="distributor">Distribuidor MLM</SelectItem>
-              <SelectItem value="customer">Cliente Final</SelectItem>
             </SelectContent>
           </Select>
 

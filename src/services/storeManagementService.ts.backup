@@ -1,0 +1,153 @@
+// src/services/storeManagementService.ts
+import { StoreInfo, StoreFormData } from '@/types/store';
+
+// Simulação de armazenamento em memória
+// Em produção, isso seria substituído por chamadas reais à API e banco de dados
+let stores: StoreInfo[] = [];
+
+// Inicializar com algumas lojas de exemplo
+stores = [
+  {
+    id: '1',
+    slug: 'allin-sao-paulo',
+    name: 'All In São Paulo',
+    category: 'Calçados Tecnológicos',
+    city: 'São Paulo - SP',
+    description: 'Loja oficial All In São Paulo. Especialistas em calçados tecnológicos com tecnologias exclusivas de magnetoterapia e infravermelho longo.',
+    logo: 'https://placehold.co/200x200',
+    banners: [
+      'https://placehold.co/1200x400',
+      'https://placehold.co/1200x400',
+      'https://placehold.co/1200x400'
+    ],
+    rating: 4.8,
+    reviewCount: 1247,
+    specialties: [
+      'Entrega Rápida',
+      'Produtos Sustentáveis',
+      'Tecnologia Exclusiva',
+      'Garantia de Qualidade'
+    ],
+    contact: {
+      whatsapp: '+5511999999999',
+      instagram: '@allinsp',
+      email: 'sp@allinbrasil.com.br',
+      address: 'Av. Paulista, 1000 - São Paulo, SP'
+    },
+    primaryColor: '#F2A801',
+    secondaryColor: '#1a202c',
+    customMessage: 'Bem-vindo à nossa loja em São Paulo!',
+    sponsorLink: 'https://exemplo.com/patrocinador-sp',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: '2',
+    slug: 'allin-rio',
+    name: 'All In Rio de Janeiro',
+    category: 'Calçados Tecnológicos',
+    city: 'Rio de Janeiro - RJ',
+    description: 'Loja oficial All In Rio. Especialistas em calçados tecnológicos com tecnologias exclusivas de magnetoterapia e infravermelho longo.',
+    logo: 'https://placehold.co/200x200',
+    banners: [
+      'https://placehold.co/1200x400',
+      'https://placehold.co/1200x400',
+      'https://placehold.co/1200x400'
+    ],
+    rating: 4.9,
+    reviewCount: 980,
+    specialties: [
+      'Entrega Rápida',
+      'Produtos Sustentáveis',
+      'Tecnologia Exclusiva',
+      'Garantia de Qualidade'
+    ],
+    contact: {
+      whatsapp: '+5521999999999',
+      instagram: '@allinrj',
+      email: 'rj@allinbrasil.com.br',
+      address: 'Av. Atlântica, 1000 - Rio de Janeiro, RJ'
+    },
+    primaryColor: '#F2A801',
+    secondaryColor: '#1a202c',
+    customMessage: 'Bem-vindo à nossa loja no Rio de Janeiro!',
+    sponsorLink: 'https://exemplo.com/patrocinador-rj',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+];
+
+export const storeManagementService = {
+  // Criar uma nova loja
+  createStore: async (storeData: StoreFormData): Promise<StoreInfo> => {
+    // Verificar se o slug já existe
+    const existingStore = stores.find(store => store.slug === storeData.slug);
+    if (existingStore) {
+      throw new Error('Já existe uma loja com este identificador');
+    }
+
+    const newStore: StoreInfo = {
+      id: Math.random().toString(36).substr(2, 9),
+      slug: storeData.slug,
+      name: storeData.name,
+      category: storeData.category,
+      city: storeData.city,
+      description: storeData.description,
+      logo: 'https://placehold.co/200x200', // Placeholder - em produção seria o upload real
+      banners: [
+        'https://placehold.co/1200x400',
+        'https://placehold.co/1200x400',
+        'https://placehold.co/1200x400'
+      ], // Placeholders - em produção seriam os uploads reais
+      rating: storeData.rating,
+      reviewCount: storeData.reviewCount,
+      specialties: storeData.specialties,
+      contact: storeData.contact,
+      primaryColor: storeData.primaryColor,
+      secondaryColor: storeData.secondaryColor,
+      customMessage: storeData.customMessage,
+      sponsorLink: storeData.sponsorLink || '',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    stores.push(newStore);
+    return newStore;
+  },
+
+  // Obter loja pelo slug
+  getStoreBySlug: async (slug: string): Promise<StoreInfo | undefined> => {
+    return stores.find(store => store.slug === slug);
+  },
+
+  // Obter todas as lojas
+  getAllStores: async (): Promise<StoreInfo[]> => {
+    return stores;
+  },
+
+  // Atualizar loja
+  updateStore: async (id: string, storeData: Partial<StoreFormData>): Promise<StoreInfo | null> => {
+    const index = stores.findIndex(store => store.id === id);
+    if (index === -1) return null;
+
+    stores[index] = {
+      ...stores[index],
+      ...storeData,
+      updatedAt: new Date()
+    } as StoreInfo;
+
+    return stores[index];
+  },
+
+  // Deletar loja
+  deleteStore: async (id: string): Promise<boolean> => {
+    const initialLength = stores.length;
+    stores = stores.filter(store => store.id !== id);
+    return stores.length < initialLength;
+  },
+
+  // Verificar se o slug já existe
+  isSlugAvailable: async (slug: string): Promise<boolean> => {
+    return !stores.some(store => store.slug === slug);
+  }
+};

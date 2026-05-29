@@ -10,6 +10,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { PublicSiteHeader } from "@/components/public/site-header";
 
 export const Route = createFileRoute("/produto/$id")({
   component: ProductDetailPage,
@@ -119,6 +120,7 @@ function ProductDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#06080d] text-white selection:bg-emerald-500/30 overflow-x-hidden">
+      <PublicSiteHeader />
       
       {/* SPONSOR ANCHOR HEADER DECK */}
       <div className="bg-[#0b1220] border-b border-border/10 px-4 py-2.5 text-center flex items-center justify-center gap-2 text-xs relative z-40">

@@ -48,6 +48,10 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     Permission.PLANS_READ,
     Permission.ANALYTICS_READ,
   ],
+  customer: [
+    Permission.ORDERS_READ,
+    Permission.PLANS_READ,
+  ],
 };
 
 export function getPermissionsForRole(role: string): Permission[] {

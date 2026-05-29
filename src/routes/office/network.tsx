@@ -2,8 +2,8 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Network, Users, ShieldAlert, Award, Star, Search, Filter, 
-  ArrowRight, TrendingUp, Sparkles, Brain, Map, HelpCircle, UserPlus,
+  Network, Users, ShieldAlert, Award, Star, Search, 
+  ArrowRight, TrendingUp, Sparkles, Brain, Map, UserPlus,
   GitMerge, ChevronRight, CheckCircle2, AlertTriangle, HelpCircle as HelpIcon, BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { kpis, networkNodes, NetworkNode, formatBRL } from "@/lib/distributor-data";
+import { kpis, NetworkNode, formatBRL } from "@/lib/distributor-data";
+import { SectionBreadcrumbs } from "@/components/navigation/section-breadcrumbs";
 
 export const Route = createFileRoute("/office/network")({
   component: NetworkPage,
@@ -74,6 +75,12 @@ function NetworkPage() {
 
   return (
     <div className="space-y-6">
+      <SectionBreadcrumbs
+        items={[
+          { label: "Office", to: "/office" },
+          { label: "Rede" },
+        ]}
+      />
       {/* Header section with telemetry/KPIs */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

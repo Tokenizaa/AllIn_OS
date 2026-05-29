@@ -1,8 +1,4 @@
-@import "tailwindcss" source(none);
-@source "../src";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
+@import "tailwindcss";
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -28,96 +24,82 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-info: var(--info);
-  --color-info-foreground: var(--info-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
-/* Enterprise dark theme (default). Indigo/violet accent on near-black canvas. */
+/* Allin Design System - Cores da marca */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.16 0.015 265);
-  --foreground: oklch(0.97 0.005 250);
-  --card: oklch(0.20 0.018 265);
-  --card-foreground: oklch(0.97 0.005 250);
-  --popover: oklch(0.21 0.02 265);
-  --popover-foreground: oklch(0.97 0.005 250);
-  --primary: oklch(0.66 0.20 280);
-  --primary-foreground: oklch(0.99 0.003 250);
-  --secondary: oklch(0.26 0.025 265);
-  --secondary-foreground: oklch(0.97 0.005 250);
-  --muted: oklch(0.24 0.022 265);
-  --muted-foreground: oklch(0.70 0.025 260);
-  --accent: oklch(0.28 0.04 280);
-  --accent-foreground: oklch(0.97 0.005 250);
-  --destructive: oklch(0.62 0.22 22);
-  --destructive-foreground: oklch(0.99 0.003 250);
-  --success: oklch(0.70 0.17 160);
-  --success-foreground: oklch(0.14 0.02 160);
-  --warning: oklch(0.78 0.16 75);
-  --warning-foreground: oklch(0.18 0.02 75);
-  --info: oklch(0.70 0.14 230);
-  --info-foreground: oklch(0.14 0.02 230);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.66 0.20 280);
-  --chart-1: oklch(0.66 0.20 280);
-  --chart-2: oklch(0.70 0.17 160);
-  --chart-3: oklch(0.78 0.16 75);
-  --chart-4: oklch(0.70 0.14 230);
-  --chart-5: oklch(0.65 0.22 350);
-  --sidebar: oklch(0.14 0.012 265);
-  --sidebar-foreground: oklch(0.85 0.01 250);
-  --sidebar-primary: oklch(0.66 0.20 280);
-  --sidebar-primary-foreground: oklch(0.99 0.003 250);
-  --sidebar-accent: oklch(0.22 0.02 265);
-  --sidebar-accent-foreground: oklch(0.97 0.005 250);
-  --sidebar-border: oklch(1 0 0 / 6%);
-  --sidebar-ring: oklch(0.66 0.20 280);
+  --radius: 0.5rem;
+  
+  /* Cores da marca Allin */
+  --allin-orange: 39 95% 48%;
+  --allin-dark: 0 0% 4%;
+  --allin-white: 0 0% 100%;
+  --allin-black: 0 0% 0%;
+  
+  /* Cores de fundo variantes para modo claro */
+  --allin-bg-light-1: 0 0% 98%;
+  --allin-bg-light-2: 45 15% 94%;
+  --allin-bg-light-3: 210 20% 96%;
+  
+  /* Cores de fundo variantes para modo escuro */
+  --allin-bg-dark-1: 220 20% 15%;
+  --allin-bg-dark-2: 220 15% 22%;
+  --allin-bg-dark-3: 220 15% 28%;
+  
+  /* Variáveis de tema claro */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 4%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 4%;
+  --primary: 39 95% 48%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 4%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 98%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 39 95% 98%;
+  --accent-foreground: 39 95% 20%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 91%;
+  --input: 0 0% 91%;
+  --ring: 39 95% 48%;
 }
 
 .dark {
-  --background: oklch(0.16 0.015 265);
-  --foreground: oklch(0.97 0.005 250);
-  --card: oklch(0.20 0.018 265);
-  --card-foreground: oklch(0.97 0.005 250);
-  --popover: oklch(0.21 0.02 265);
-  --popover-foreground: oklch(0.97 0.005 250);
-  --primary: oklch(0.66 0.20 280);
-  --primary-foreground: oklch(0.99 0.003 250);
-  --secondary: oklch(0.26 0.025 265);
-  --secondary-foreground: oklch(0.97 0.005 250);
-  --muted: oklch(0.24 0.022 265);
-  --muted-foreground: oklch(0.70 0.025 260);
-  --accent: oklch(0.28 0.04 280);
-  --accent-foreground: oklch(0.97 0.005 250);
-  --destructive: oklch(0.62 0.22 22);
-  --destructive-foreground: oklch(0.99 0.003 250);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.66 0.20 280);
+  /* Cores da marca Allin para modo escuro */
+  --allin-orange: 39 95% 55%;
+  --allin-dark: 0 0% 95%;
+  --allin-white: 0 0% 100%;
+  --allin-black: 220 20% 15%;
+  
+  /* Variáveis de tema escuro */
+  --background: 220 20% 15%;
+  --foreground: 0 0% 95%;
+  --card: 220 15% 20%;
+  --card-foreground: 0 0% 95%;
+  --popover: 220 15% 20%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 39 95% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 95%;
+  --secondary-foreground: 0 0% 10%;
+  --muted: 220 15% 25%;
+  --muted-foreground: 0 0% 75%;
+  --accent: 220 20% 25%;
+  --accent-foreground: 0 0% 90%;
+  --destructive: 0 62.8% 40%;
+  --destructive-foreground: 0 0% 95%;
+  --border: 220 15% 25%;
+  --input: 220 15% 25%;
+  --ring: 39 95% 65%;
 }
 
 @layer base {
@@ -136,14 +118,133 @@
 }
 
 @layer utilities {
-  .glow-primary {
-    box-shadow: 0 0 0 1px oklch(0.66 0.20 280 / 0.25), 0 8px 30px -10px oklch(0.66 0.20 280 / 0.45);
+  /* Allin brand utilities */
+  .bg-allin-orange {
+    background-color: hsl(var(--allin-orange));
   }
-  .grid-bg {
-    background-image:
-      linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px);
-    background-size: 32px 32px;
+  
+  .text-allin-orange {
+    color: hsl(var(--allin-orange));
   }
+  
+  .border-allin-orange {
+    border-color: hsl(var(--allin-orange));
+  }
+  
+  .bg-allin-dark {
+    background-color: hsl(var(--allin-dark));
+  }
+  
+  .text-allin-dark {
+    color: hsl(var(--allin-dark));
+  }
+  
+  .border-allin-dark {
+    border-color: hsl(var(--allin-dark));
+  }
+  
+  .bg-allin-white {
+    background-color: hsl(var(--allin-white));
+  }
+  
+  .text-allin-white {
+    color: hsl(var(--allin-white));
+  }
+  
+  .border-allin-white {
+    border-color: hsl(var(--allin-white));
+  }
+  
+  .bg-allin-bg-light-1 {
+    background-color: hsl(var(--allin-bg-light-1));
+  }
+  
+  .bg-allin-bg-light-2 {
+    background-color: hsl(var(--allin-bg-light-2));
+  }
+  
+  .bg-allin-bg-light-3 {
+    background-color: hsl(var(--allin-bg-light-3));
+  }
+  
+  .dark .dark\:bg-allin-bg-dark-1 {
+    background-color: hsl(var(--allin-bg-dark-1));
+  }
+  
+  .dark .dark\:bg-allin-bg-dark-2 {
+    background-color: hsl(var(--allin-bg-dark-2));
+  }
+  
+  .dark .dark\:bg-allin-bg-dark-3 {
+    background-color: hsl(var(--allin-bg-dark-3));
+  }
+  
+  .dark .dark\:bg-allin-dark {
+    background-color: hsl(var(--allin-dark));
+  }
+  
+  .dark .dark\:text-allin-white {
+    color: hsl(var(--allin-white));
+  }
+  
+  .dark .dark\:border-allin-orange {
+    border-color: hsl(var(--allin-orange));
+  }
+  
+  /* Glassmorphism utilities */
+  .glass-card-orange {
+    background-color: hsl(var(--allin-orange) / 0.05);
+    backdrop-filter: blur(24px);
+    border-radius: 0.75rem;
+    border-width: 1px;
+    border-color: hsl(var(--allin-orange) / 0.2);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.3s;
+  }
+  
+  /* Text on orange background in dark mode */
+  .dark .bg-allin-orange .text-allin-white,
+  .dark .bg-allin-orange [class*="text-allin-white"] {
+    color: hsl(var(--allin-bg-dark-1)) !important;
+  }
+  
+  .text-on-orange-dark {
+    color: hsl(var(--allin-white));
+  }
+  
+  .dark .text-on-orange-dark {
+    color: hsl(var(--allin-bg-dark-1));
+  }
+  
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes fade-in {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes slide-up {
+    0% { transform: translateY(30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out forwards;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
   .text-balance { text-wrap: balance; }
 }

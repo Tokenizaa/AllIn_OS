@@ -1,20 +1,19 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { 
   AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, 
   CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from "recharts";
 import { 
-  BarChart3, TrendingUp, Calendar, ArrowUpRight, ArrowDownRight,
-  Download, Sparkles, Brain, FileSpreadsheet, FileText, CheckCircle2,
-  Filter, RotateCcw, HelpCircle, Activity, ShoppingCart, Users
+  BarChart3, TrendingUp, ArrowUpRight,
+  FileSpreadsheet, FileText, CheckCircle2,
+  Activity, ShoppingCart, Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { formatBRL, salesSeries } from "@/lib/distributor-data";
+import { formatBRL } from "@/lib/distributor-data";
 import { toast } from "sonner";
+import { SectionBreadcrumbs } from "@/components/navigation/section-breadcrumbs";
 
 export const Route = createFileRoute("/office/reports")({
   component: ReportsPage,
@@ -51,6 +50,12 @@ function ReportsPage() {
 
   return (
     <div className="space-y-6">
+      <SectionBreadcrumbs
+        items={[
+          { label: "Office", to: "/office" },
+          { label: "Relatórios" },
+        ]}
+      />
       
       {/* Title & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

@@ -25,7 +25,7 @@ export class PaymentService {
 
     if (params.customer_id) {
       payments = await this.repository.findByCustomerId(params.customer_id, { limit, offset });
-      total = await this.repository.count();
+      total = await this.repository.countByCustomerId(params.customer_id);
     } else if (params.status) {
       payments = await this.repository.findByStatus(params.status, { limit, offset });
       total = await this.repository.countByStatus(params.status);

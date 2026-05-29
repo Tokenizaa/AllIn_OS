@@ -36,7 +36,7 @@ export const authResponseSchema = z.object({
     id: z.string().uuid(),
     name: z.string(),
     email: z.string(),
-    role: z.enum(["admin", "operator", "distributor"]),
+    role: z.enum(["admin", "operator", "distributor", "customer"]),
   }),
   accessToken: z.string(),
   refreshToken: z.string(),

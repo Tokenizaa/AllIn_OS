@@ -1,9 +1,12 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 
 // --- TYPES & INTERFACES ---
 
 export type UserRole = 
+  | "admin"
+  | "operator"
   | "admin_master" 
   | "finance" 
   | "support" 
@@ -267,6 +270,23 @@ const DEFAULT_AUDIT_LOGS: AuditLog[] = [
 ];
 
 const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+  admin: [
+    { id: "a1", module: "dashboard", action: "all", description: "Acesso total ao Dashboard executivo" },
+    { id: "a2", module: "analytics", action: "all", description: "Ver relatórios e analytics globais" },
+    { id: "a3", module: "finance", action: "all", description: "Gerenciar pagamentos, saques e bônus" },
+    { id: "a4", module: "support", action: "all", description: "Visualizar e atualizar chamados e KYC" },
+    { id: "a5", module: "network", action: "all", description: "Ver árvore unilevel e binária global" },
+    { id: "a6", module: "orders", action: "all", description: "Gerenciar todos os pedidos e logística" },
+    { id: "a7", module: "products", action: "all", description: "Criar, editar e excluir produtos" },
+    { id: "a8", module: "marketing", action: "all", description: "Disparar campanhas e banners corporativos" },
+    { id: "a9", module: "settings", action: "all", description: "Modificar regras comissões e gateways" },
+    { id: "a10", module: "system", action: "all", description: "Acesso total a auditoria e banco de dados" }
+  ],
+  operator: [
+    { id: "o1", module: "dashboard", action: "read", description: "Visualizar resumos operacionais" },
+    { id: "o2", module: "orders", action: "write", description: "Atuar em pedidos e operação" },
+    { id: "o3", module: "support", action: "read", description: "Consultar tickets e status" }
+  ],
   admin_master: [
     { id: "p1", module: "dashboard", action: "all", description: "Acesso total ao Dashboard executivo" },
     { id: "p2", module: "analytics", action: "all", description: "Ver relatórios e analytics globais" },
@@ -349,6 +369,52 @@ const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   ]
 };
 
+const ROLE_ALIASES: Record<string, UserRole> = {
+  admin_master: "admin",
+  "gestão_admin": "admin",
+  financeiro: "operator",
+  finance: "operator",
+  suporte: "operator",
+  support: "operator",
+  logística: "operator",
+  logistica: "operator",
+  marketing: "operator",
+  analytics: "operator",
+  auditor: "operator",
+  operador: "operator",
+  operator: "operator",
+  distributor: "distributor",
+  customer: "customer",
+  admin: "admin",
+};
+
+export const normalizeUserRole = (role: string): UserRole => {
+  return (ROLE_ALIASES[role] || role || "customer") as UserRole;
+};
+
+export const getRoleLabel = (role: string): string => {
+  switch (normalizeUserRole(role)) {
+    case "admin":
+      return "Admin";
+    case "operator":
+      return "Operador";
+    case "distributor":
+      return "Distribuidor";
+    case "customer":
+      return "Cliente";
+    default:
+      return role;
+  }
+};
+
+export const getRoleBadgeStyle = (role: string): string => {
+  const normalized = normalizeUserRole(role);
+  if (normalized === "admin") return "bg-rose-500/15 text-rose-400 border-rose-500/30";
+  if (normalized === "operator") return "bg-amber-500/15 text-amber-400 border-amber-500/30";
+  if (normalized === "distributor") return "bg-cyan-500/15 text-cyan-400 border-cyan-500/30";
+  return "bg-slate-500/15 text-slate-400 border-slate-500/20";
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -392,8 +458,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (Array.isArray(parsed)) {
             initialUsers = parsed;
           }
-        } catch (e) {
-          console.error("Error parsing stored users, resetting:", e);
+        } catch (error) {
+          console.error("Error parsing stored users, resetting:", error);
         }
       } else {
         localStorage.setItem("allin_users", JSON.stringify(DEFAULT_USERS));
@@ -405,8 +471,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (Array.isArray(parsed)) {
             initialDistributors = parsed;
           }
-        } catch (e) {
-          console.error("Error parsing stored distributors, resetting:", e);
+        } catch (error) {
+          console.error("Error parsing stored distributors, resetting:", error);
         }
       } else {
         localStorage.setItem("allin_distributors", JSON.stringify(DEFAULT_DISTRIBUTORS));
@@ -418,8 +484,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (Array.isArray(parsed)) {
             initialReferrals = parsed;
           }
-        } catch (e) {
-          console.error("Error parsing stored referrals, resetting:", e);
+        } catch (error) {
+          console.error("Error parsing stored referrals, resetting:", error);
         }
       } else {
         localStorage.setItem("allin_referrals", JSON.stringify(DEFAULT_REFERRALS));
@@ -431,8 +497,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (Array.isArray(parsed)) {
             initialLogs = parsed;
           }
-        } catch (e) {
-          console.error("Error parsing stored audit logs, resetting:", e);
+        } catch (error) {
+          console.error("Error parsing stored audit logs, resetting:", error);
         }
       } else {
         localStorage.setItem("allin_audit_logs", JSON.stringify(DEFAULT_AUDIT_LOGS));
@@ -448,8 +514,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (Array.isArray(parsed)) {
             initialInvites = parsed;
           }
-        } catch (e) {
-          console.error("Error parsing stored invites, resetting:", e);
+        } catch (error) {
+          console.error("Error parsing stored invites, resetting:", error);
         }
       }
 
@@ -543,8 +609,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               setDistributorProfile(dProf);
             }
           }
-        } catch (e) {
-          console.error("Error parsing saved session info:", e);
+        } catch (error) {
+          console.error("Error parsing saved session info:", error);
           localStorage.removeItem("allin_session");
         }
       }
@@ -594,7 +660,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (cachedMeta) {
           try {
             setActiveReferralMetadata(JSON.parse(cachedMeta));
-          } catch (e) {
+          } catch (error) {
+            void error;
             localStorage.removeItem("allin_active_ref_meta");
           }
         }
@@ -664,7 +731,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     saveLogsDB(updated);
   };
 
-  const triggerBinomialBonusPay = async (points: number, commission: number, value: number) => {
+  const triggerBinomialBonusPay = async (points: number, commission: number, _value: number) => {
+    void _value;
     const activeSponsorId = activeSponsor || "marcus_lider_platinum";
     
     const updatedDists = distributorsList.map((d) => {
@@ -690,7 +758,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // --- AUTH METHODS ---
 
-  const login = async (email: string, password: string): Promise<User> => {
+  const login = async (email: string, _password: string): Promise<User> => {
+    void _password;
     setLoading(true);
     // Simulate API network wait
     await new Promise((resolve) => setTimeout(resolve, 600));
@@ -1081,7 +1150,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return found;
   };
 
-  const acceptAdminInvite = async (token: string, name: string, password: string): Promise<User> => {
+  const acceptAdminInvite = async (token: string, name: string, _password: string): Promise<User> => {
+    void _password;
     const invite = adminInvites.find(inv => inv.invite_token === token);
     if (!invite) throw new Error("Convite inválido ou token inexistente.");
 
@@ -1239,8 +1309,8 @@ export const RouteGuard: React.FC<GuardProps> = ({ children, allowedRoles, requi
         // Role mismatch redirect to their respective primary view
         if (user.role === "distributor") {
           navigate({ to: "/office" });
-        } else if (user.role === "customer") {
-          navigate({ to: "/store" });
+      } else if (user.role === "customer") {
+          navigate({ to: "/office/store" });
         } else {
           navigate({ to: "/" });
         }
@@ -1254,7 +1324,7 @@ export const RouteGuard: React.FC<GuardProps> = ({ children, allowedRoles, requi
         navigate({ to: "/" });
       }
     }
-  }, [user, loading, allowedRoles, requiredPermission, navigate, location.pathname]);
+  }, [user, loading, allowedRoles, requiredPermission, navigate, location.pathname, hasPermission]);
 
   if (loading) {
     console.log("[RouteGuard] Still loading, showing loader spinner.");

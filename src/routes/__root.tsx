@@ -4,7 +4,6 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
-  ScrollRestoration,
 } from "@tanstack/react-router";
 
 import { AuthProvider } from "../lib/auth-context";
@@ -80,7 +79,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Outlet />
-        <ScrollRestoration />
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { SidebarNav } from "@/components/app/sidebar-nav";
 import { Topbar } from "@/components/app/topbar";
 import { CopilotDrawer } from "@/components/app/copilot-drawer";
-import { RouteGuard } from "@/lib/auth-context";
+import { RouteGuard } from "@/lib/auth-guards";
 
 export const Route = createFileRoute("/_app")({
   component: AppLayoutSecure,
@@ -11,7 +11,21 @@ export const Route = createFileRoute("/_app")({
 
 function AppLayoutSecure() {
   return (
-    <RouteGuard allowedRoles={["admin_master", "finance", "support"]}>
+    <RouteGuard
+      allowedRoles={[
+        "admin_master",
+        "finance",
+        "support",
+        "gestão_admin",
+        "financeiro",
+        "suporte",
+        "logística",
+        "marketing",
+        "analytics",
+        "auditor",
+        "operador",
+      ]}
+    >
       <AppLayout />
     </RouteGuard>
   );

@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 import { CheckCircle2, ShieldEllipsis, ShieldAlert } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { PublicSiteHeader } from "@/components/public/site-header";
 
 export const Route = createFileRoute("/redefinir-senha")({
   component: ResetPasswordPage,
@@ -42,6 +43,7 @@ function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen flex text-foreground bg-[#04060a] relative overflow-hidden py-12 px-4 flex-col justify-center items-center">
+      <PublicSiteHeader />
       <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-primary/10 blur-[130px] pointer-events-none" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#080c14_1px,transparent_1px),linear-gradient(to_bottom,#080c14_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-40" />
 
