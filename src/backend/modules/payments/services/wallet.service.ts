@@ -42,7 +42,6 @@ export class WalletService {
   }
 
   async getWalletByCustomerId(customerId: string): Promise<Wallet | null> {
-    const supabase = getSupabaseAdminClient();
     try {
       const { data, error } = await supabase
         .from('wallets')
@@ -64,8 +63,7 @@ export class WalletService {
 
   async createWallet(customerId: string): Promise<Wallet> {
     logger.info('Creating wallet', 'wallet-service', { customerId });
-const supabase = getSupabaseAdminClient();
-    
+
     try {
       const { data, error } = await supabase
         .from('wallets')
@@ -390,7 +388,6 @@ const supabase = getSupabaseAdminClient();
         return [];
       }
 
-      const supabase = getSupabaseAdminClient();
       const { data, error } = await supabase
         .from('wallet_transactions')
         .select('*')

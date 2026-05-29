@@ -4,7 +4,7 @@ import {
   Sparkles, Settings2, LineChart, Bell, Boxes, ShieldCheck, Layers, LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuth, usePermissions } from "@/modules/auth";
+import { useAuth, usePermissions } from "@/lib/auth-context";
 import { toast } from "sonner";
 
 type NavItem = { 

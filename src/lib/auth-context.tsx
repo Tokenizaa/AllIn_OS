@@ -1,10 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 
-const getOrigin = () => {
-  return typeof window !== 'undefined' ? window.location.origin : 'https://allin.io';
-};
-
 // --- TYPES & INTERFACES ---
 
 export type UserRole = 
@@ -378,13 +374,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Init loads
   useEffect(() => {
     console.log("[AuthProvider] Initialization useEffect started.");
-    
-    // Force loading to false after a timeout to prevent infinite loading
-    const timeout = setTimeout(() => {
-      console.log("[AuthProvider] Timeout fallback: Setting loading to false");
-      setLoading(false);
-    }, 5000);
-    
     try {
       // 1. Initialize Mock Database from LocalStorage (or set defaults)
       const storedUsers = localStorage.getItem("allin_users");
@@ -473,7 +462,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             role: "financeiro",
             permissions: ["finance", "orders", "analytics"],
             invite_token: "token-mariana-accepted",
-            invite_link: `${window.locanion.oow.lotion.origin}/auth/invite/token-mariana-accepted`,
+            invite_link: `${window.location.origin}/auth/invite/token-mariana-accepted`,
             invited_by: "admin@allin.io",
             expires_at: new Date(Date.now() - 5 * 24 * 3600000).toISOString(),
             accepted_at: new Date(Date.now() - 4 * 24 * 3600000).toISOString(),
@@ -501,7 +490,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             role: "logística",
             permissions: ["orders", "products"],
             invite_token: "token-renato-expired",
-            invite_link: `${getOrigin()}/auth/invite/token-renato-expired`,
+            invite_link: `${window.location.origin}/auth/invite/token-renato-expired`,
             invited_by: "admin@allin.io",
             expires_at: new Date(Date.now() - 1 * 24 * 3600000).toISOString(),
             status: "expired",
@@ -514,7 +503,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             role: "marketing",
             permissions: ["marketing"],
             invite_token: "token-fernanda-revoked",
-            invite_link: `${getOrigin()}/auth/invite/token-fernanda-revoked`,
+            invite_link: `${window.location.origin}/auth/invite/token-fernanda-revoked`,
             invited_by: "admin@allin.io",
             expires_at: new Date(Date.now() + 5 * 24 * 3600000).toISOString(),
             revoked_at: new Date(Date.now() - 1 * 24 * 3600000).toISOString(),
@@ -561,9 +550,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // 3. Process URL sponsor tracking (on load)
-      const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+      const params = new URLSearchParams(window.location.search);
       const refParam = params.get("ref");
-      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+      const currentPath = window.location.pathname;
       
       // Check if path is e.g. /loja/ref/marcus or if query ?ref=marcus exists
       let potentialSponsor = refParam;
@@ -586,7 +575,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setActiveSponsor(validDist.referral_code || validDist.id);
           const meta = {
             clicked_at: new Date().toISOString(),
-            landing_url: typeof window !== 'undefined' ? window.location.href : '',
+            landing_url: window.location.href,
             referrer_code: cleanRef,
             device: typeof navigator !== "undefined" ? navigator.userAgent : "ssr"
           };
@@ -613,14 +602,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error("[AuthProvider] Fatal error during AuthContext initialization:", error);
     } finally {
-      clearTimeout(timeout);
       console.log("[AuthProvider] useEffect initialization completed. Setting loading state to false.");
       setLoading(false);
     }
-    
-    return () => {
-      clearTimeout(timeout);
-    };
   }, []);
 
   // Sync state helpers to persistent local db

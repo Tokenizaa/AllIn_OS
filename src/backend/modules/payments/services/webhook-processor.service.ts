@@ -1,7 +1,7 @@
 import { WebhookEvent } from '../interfaces/payment-provider.interface';
 import { GatewayAdapterFactory, GatewayType } from '../adapters/gateway-adapter.factory';
 import { logger } from '../../../shared/observability/logger.service';
-import { getSupabaseAdminClient } from '../../../infra/supabase/client';
+import { supabase } from '../../../shared/infrastructure/supabase/client';
 
 export class WebhookProcessorService {
   private static instance: WebhookProcessorService;
@@ -58,7 +58,6 @@ export class WebhookProcessorService {
   }
 
   private async logWebhook(gatewayType: GatewayType, event: WebhookEvent): Promise<void> {
-    const supabase = getSupabaseAdminClient();
     try {
       const { data, error } = await supabase
         .from('gateway_webhooks')
@@ -82,7 +81,6 @@ export class WebhookProcessorService {
   }
 
   private async markWebhookAsProcessed(event: WebhookEvent, success: boolean, errorMessage?: string): Promise<void> {
-    const supabase = getSupabaseAdminClient();
     try {
       const { error } = await supabase
         .from('gateway_webhooks')
@@ -104,7 +102,6 @@ export class WebhookProcessorService {
   }
 
   private async updatePaymentStatus(gatewayTransactionId: string, status: string): Promise<void> {
-    const supabase = getSupabaseAdminClient();
     try {
       const { error } = await supabase
         .from('payments')
@@ -130,7 +127,6 @@ export class WebhookProcessorService {
   async retryFailedWebhooks(): Promise<void> {
     logger.info('Retrying failed webhooks', 'webhook-processor');
 
-    const supabase = getSupabaseAdminClient();
     try {
       const { data: failedWebhooks, error } = await supabase
         .from('gateway_webhooks')

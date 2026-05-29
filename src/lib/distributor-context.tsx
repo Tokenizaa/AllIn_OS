@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "@/modules/auth";
+import { useAuth } from "@/lib/auth-context";
 
 export const DEFAULT_DISTRIBUTOR = "allinBrasil";
 

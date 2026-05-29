@@ -5,7 +5,7 @@ import { Copy, Share2, QrCode, Sparkles, ExternalLink, Eye, ShoppingCart, Percen
 import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/distributor/stat-card";
 import { distributor, storeAnalytics, formatBRL } from "@/lib/distributor-data";
-import { useAuth } from "@/modules/auth";
+import { useAuth } from "@/lib/auth-context";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 

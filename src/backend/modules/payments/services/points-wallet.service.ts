@@ -1,5 +1,5 @@
 import { logger } from '../../../shared/observability/logger.service';
-import { getSupabaseAdminClient } from '../../../infra/supabase/client';
+import { supabase } from '../../../shared/infrastructure/supabase/client';
 import { eventEmitter } from '../../../shared/events/event-emitter';
 import { EventType } from '../../../shared/events/event-types';
 

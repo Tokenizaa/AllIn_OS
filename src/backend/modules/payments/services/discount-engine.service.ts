@@ -1,5 +1,5 @@
 import { logger } from '../../../shared/observability/logger.service';
-import { getSupabaseAdminClient } from '../../../infra/supabase/client';
+import { supabase } from '../../../shared/infrastructure/supabase/client';
 
 export interface DiscountRule {
   id: string;

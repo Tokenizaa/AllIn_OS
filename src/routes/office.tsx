@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { OfficeSidebar } from "@/components/distributor/sidebar";
 import { OfficeTopbar } from "@/components/distributor/topbar";
-import { AuthGuard } from "@/modules/auth";
+import { RouteGuard } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/office")({
   component: OfficeLayoutSecure,
@@ -9,9 +9,9 @@ export const Route = createFileRoute("/office")({
 
 function OfficeLayoutSecure() {
   return (
-    <AuthGuard allowedRoles={["distributor", "customer"]}>
+    <RouteGuard allowedRoles={["distributor", "customer"]}>
       <OfficeLayout />
-    </AuthGuard>
+    </RouteGuard>
   );
 }
 

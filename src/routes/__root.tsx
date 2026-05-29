@@ -7,8 +7,8 @@ import {
   ScrollRestoration,
 } from "@tanstack/react-router";
 
-import { AuthProvider } from "../modules/auth";
-import { DistributorProvider as DistributorThemeProvider } from "../lib/distributor-context";
+import { AuthProvider } from "../lib/auth-context";
+import { DistributorProvider } from "../lib/distributor-context";
 import "../styles.css";
 
 function NotFoundComponent() {
@@ -80,10 +80,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <DistributorThemeProvider>
+        <DistributorProvider>
           <Outlet />
           <ScrollRestoration />
-        </DistributorThemeProvider>
+        </DistributorProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

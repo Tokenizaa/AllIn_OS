@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
-import { useAuth } from "@/modules/auth";
+import { useAuth } from "@/lib/auth-context";
 import { useDistributor } from "@/lib/distributor-context";
 import { plansCatalog } from "@/lib/distributor-data";
 import { 

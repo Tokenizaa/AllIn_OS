@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useAuth } from "@/modules/auth";
+import { useAuth } from "@/lib/auth-context";
 import { ShieldCheck, Mail, ArrowRight, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";

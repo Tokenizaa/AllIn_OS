@@ -1,5 +1,5 @@
 import { logger } from '../../../shared/observability/logger.service';
-import { getSupabaseAdminClient } from '../../../infra/supabase/client';
+import { supabase } from '../../../shared/infrastructure/supabase/client';
 
 export interface RetryJob {
   id: string;
@@ -29,7 +29,6 @@ export class RetryQueueService {
   async scheduleRetry(paymentId: string, payload: any, delaySeconds: number = 60): Promise<void> {
     logger.info('Scheduling payment retry', 'retry-queue', { paymentId, delaySeconds });
 
-    const supabase = getSupabaseAdminClient();
     try {
       const { error } = await supabase
         .from('payment_attempts')
@@ -51,7 +50,6 @@ export class RetryQueueService {
   async incrementRetryAttempt(paymentId: string, delaySeconds: number = 120): Promise<void> {
     logger.info('Incrementing retry attempt', 'retry-queue', { paymentId });
 
-    const supabase = getSupabaseAdminClient();
     try {
       const { data: currentAttempt } = await supabase
         .from('payment_attempts')
@@ -96,7 +94,6 @@ export class RetryQueueService {
 
     this.isProcessing = true;
 
-    const supabase = getSupabaseAdminClient();
     try {
       const { data: pendingRetries, error } = await supabase
         .from('payment_attempts')
