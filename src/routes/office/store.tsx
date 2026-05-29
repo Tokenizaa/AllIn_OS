@@ -342,19 +342,76 @@ function StorePage() {
         <p className="text-sm text-muted-foreground">Sua vitrine personalizada, analytics e criativos prontos.</p>
       </div>
 
-      <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-primary/15 via-fuchsia-500/5 to-transparent p-6">
-        <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-primary/20 blur-3xl" />
-        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground">Seu link de loja</p>
-            <p className="mt-1 font-mono text-lg truncate">https://store.allin.io/ref/{user?.referral_code || "marcus"}</p>
+      <div className="grid md:grid-cols-3 gap-4">
+        {/* Personal Landing link */}
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-card/40 p-5 space-y-3">
+          <div>
+            <span className="text-[10px] uppercase font-bold tracking-wider text-primary">Sítio Pessoal</span>
+            <p className="mt-1 font-mono text-sm truncate">/{user?.referral_code || "marcus"}</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="outline" size="sm" className="gap-2" onClick={() => { navigator.clipboard.writeText(`https://store.allin.io/ref/${user?.referral_code || "marcus"}`); toast.success("Link copiado!"); }}>
-              <Copy className="h-3.5 w-3.5" /> Copiar Link Comercial
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" className="w-full text-xs" onClick={() => { 
+              const link = `${window.location.origin}/${user?.referral_code || "marcus"}`;
+              navigator.clipboard.writeText(link); 
+              toast.success("Link pessoal copiado!"); 
+            }}>
+              Copiar Link
             </Button>
-            <Button variant="outline" size="sm" className="gap-2"><Share2 className="h-3.5 w-3.5" /> Compartilhar</Button>
-            <Button variant="outline" size="sm" className="gap-2"><QrCode className="h-3.5 w-3.5" /> QR Code</Button>
+            <a 
+              href={`/${user?.referral_code || "marcus"}`} 
+              target="_blank" 
+              className="inline-flex items-center justify-center rounded-lg border border-input bg-background px-3 text-xs hover:bg-accent hover:text-accent-foreground"
+            >
+              Acessar
+            </a>
+          </div>
+        </div>
+
+        {/* Store link */}
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-card/40 p-5 space-y-3">
+          <div>
+            <span className="text-[10px] uppercase font-bold tracking-wider text-[#a855f7]">Virtual Store</span>
+            <p className="mt-1 font-mono text-sm truncate">/loja/{user?.referral_code || "marcus"}</p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" className="w-full text-xs" onClick={() => { 
+              const link = `${window.location.origin}/loja/${user?.referral_code || "marcus"}`;
+              navigator.clipboard.writeText(link); 
+              toast.success("Link da loja copiado!"); 
+            }}>
+              Copiar Link
+            </Button>
+            <a 
+              href={`/loja/${user?.referral_code || "marcus"}`} 
+              target="_blank" 
+              className="inline-flex items-center justify-center rounded-lg border border-input bg-background px-3 text-xs hover:bg-accent hover:text-accent-foreground"
+            >
+              Acessar
+            </a>
+          </div>
+        </div>
+
+        {/* Recruitment link */}
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-card/40 p-5 space-y-3">
+          <div>
+            <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400">Recrutamento MLM</span>
+            <p className="mt-1 font-mono text-sm truncate">/seja-distribuidor/{user?.referral_code || "marcus"}</p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" className="w-full text-xs" onClick={() => { 
+              const link = `${window.location.origin}/seja-distribuidor/${user?.referral_code || "marcus"}`;
+              navigator.clipboard.writeText(link); 
+              toast.success("Link de captação copiado!"); 
+            }}>
+              Copiar Link
+            </Button>
+            <a 
+              href={`/seja-distribuidor/${user?.referral_code || "marcus"}`} 
+              target="_blank" 
+              className="inline-flex items-center justify-center rounded-lg border border-input bg-background px-3 text-xs hover:bg-accent hover:text-accent-foreground"
+            >
+              Acessar
+            </a>
           </div>
         </div>
       </div>

@@ -152,14 +152,23 @@ TO authenticated
 USING (public.get_auth_user_role() IN ('admin_master', 'gestão_admin', 'suporte', 'financeiro'))
 WITH CHECK (public.get_auth_user_role() IN ('admin_master', 'gestão_admin', 'suporte', 'financeiro'));
 
--- Policy: Distributors can view referrals and registered sub-customers
-CREATE POLICY "Distributors can view own customers"
+-- Policy: Distributors can view direct and indirect downlines, but never other network distributors outside their downline
+CREATE POLICY "Distributors can view downlines and own record"
 ON public.customers
 FOR SELECT
 TO authenticated
 USING (
     public.get_auth_user_role() = 'distributor' 
-    AND sponsor_id = auth.uid()
+    AND (
+        id = auth.uid()
+        OR sponsor_id = auth.uid()
+        OR EXISTS (
+            SELECT 1 
+            FROM public.network_relationships nr 
+            WHERE nr.customer_id = public.customers.id 
+              AND nr.sponsor_customer_id = auth.uid()
+        )
+    )
 );
 
 -- Policy: Customers can manage their own details
@@ -336,6 +345,111 @@ BEGIN
             '127.0.0.1'::inet);
 
     RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ---------------------------------------------------------------------
+-- 7. MLM SYSTEM: COMPLETE DOWNLINE TREE FETCH WITH RBAC VALIDATION
+-- ---------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.get_complete_downline_tree(p_customer_id UUID)
+RETURNS TABLE (
+    customer_id UUID,
+    name VARCHAR,
+    email VARCHAR,
+    status VARCHAR,
+    plan_id UUID,
+    sponsor_id UUID,
+    level INT,
+    path UUID[]
+) AS $$
+DECLARE
+    v_caller_role VARCHAR;
+    v_caller_id UUID;
+    v_authorized BOOLEAN := FALSE;
+BEGIN
+    -- 1. Get authenticated user properties
+    v_caller_role := public.get_auth_user_role();
+    v_caller_id := auth.uid();
+
+    -- 2. Validate access based on RBAC & relationship
+    IF v_caller_role IN ('admin_master', 'gestão_admin', 'suporte', 'financeiro', 'finance', 'auditor', 'operador', 'logística') THEN
+        -- Admins and backoffice staff can access any customer's tree
+        v_authorized := TRUE;
+    ELSIF v_caller_role = 'distributor' THEN
+        -- Distributors can access their own tree, or any tree rooted at a customer in their downline
+        IF p_customer_id = v_caller_id THEN
+            v_authorized := TRUE;
+        ELSE
+            -- Check if p_customer_id is a direct downline (sponsor_id = v_caller_id)
+            -- or indirect downline via network_relationships table
+            SELECT EXISTS (
+                SELECT 1 
+                FROM public.customers c
+                WHERE c.id = p_customer_id 
+                  AND (c.sponsor_id = v_caller_id OR EXISTS (
+                      SELECT 1 
+                      FROM public.network_relationships nr 
+                      WHERE nr.customer_id = p_customer_id 
+                        AND nr.sponsor_customer_id = v_caller_id
+                  ))
+            ) INTO v_authorized;
+        END IF;
+    ELSIF v_caller_role = 'customer' THEN
+        -- Customers can only access their own detailed node (depth 0, no child downlines)
+        IF p_customer_id = v_caller_id THEN
+            v_authorized := TRUE;
+        END IF;
+    END IF;
+
+    -- 3. Block unauthorized access
+    IF NOT v_authorized THEN
+        RAISE EXCEPTION 'Acesso negado. Você não tem permissão para visualizar a downline deste cliente.';
+    END IF;
+
+    -- 4. Calculate tree recursively using CTE (Common Table Expression / Hierarchical query)
+    RETURN QUERY
+    WITH RECURSIVE downline_cte AS (
+        -- Anchor member: select the starting customer
+        SELECT 
+            c.id, 
+            c.name, 
+            c.email, 
+            c.status::VARCHAR, 
+            c.plan_id, 
+            c.sponsor_id, 
+            0 AS calculated_level, 
+            ARRAY[c.id] AS calculated_path
+        FROM public.customers c
+        WHERE c.id = p_customer_id
+
+        UNION ALL
+
+        -- Recursive member: select child customers sponsored by members in the downline_cte
+        SELECT 
+            c.id, 
+            c.name, 
+            c.email, 
+            c.status::VARCHAR, 
+            c.plan_id, 
+            c.sponsor_id, 
+            d.calculated_level + 1 AS calculated_level, 
+            d.calculated_path || c.id AS calculated_path
+        FROM public.customers c
+        INNER JOIN downline_cte d ON c.sponsor_id = d.id
+        -- Safety condition to prevent loops (cycles)
+        WHERE NOT (c.id = ANY(d.calculated_path))
+    )
+    SELECT 
+        cte.id AS customer_id, 
+        cte.name::VARCHAR, 
+        cte.email::VARCHAR, 
+        cte.status::VARCHAR, 
+        cte.plan_id, 
+        cte.sponsor_id, 
+        cte.calculated_level AS level, 
+        cte.calculated_path AS path
+    FROM downline_cte cte
+    ORDER BY cte.calculated_level, cte.name;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 

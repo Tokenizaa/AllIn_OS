@@ -38,19 +38,14 @@ export class IdempotencyService {
 
     logger.info('Executing operation for new idempotent key', 'idempotency-service', { key });
 
-    try {
-      const response = await operation();
+    const response = await operation();
 
-      this.set(key, {
-        response,
-        status: 'success',
-      }, ttl);
+    this.set(key, {
+      response,
+      status: 'success',
+    }, ttl);
 
-      return { response, isCached: false };
-    } catch (error) {
-      // Don't cache errors by default, but you could if needed
-      throw error;
-    }
+    return { response, isCached: false };
   }
 
   get(key: string): IdempotencyKeyRecord | null {

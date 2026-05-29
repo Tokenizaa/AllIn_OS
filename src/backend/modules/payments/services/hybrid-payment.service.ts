@@ -158,7 +158,7 @@ export class HybridPaymentService {
       }
 
       // Step 5: Process remaining amount through gateway
-      let gatewayAmount = remainingAmount;
+      const gatewayAmount = remainingAmount;
       let gatewayPaymentData: PaymentResponse | undefined;
 
       if (gatewayAmount > 0) {

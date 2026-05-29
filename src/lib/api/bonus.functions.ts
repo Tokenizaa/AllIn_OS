@@ -66,7 +66,7 @@ export const calculateCommission = createServerFn({ method: "POST" })
     const networkData = await networkResponse.json();
     const sponsor = networkData[0];
 
-    let mlm_commissions = [];
+    const mlm_commissions = [];
     let total_mlm_commission = 0;
 
     if (sponsor && sponsor.sponsor_customer_id) {
