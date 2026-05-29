@@ -29,12 +29,18 @@ export function DistributorRecruitmentPage() {
     if (routeSlug) {
       setDistributorBySlug(routeSlug);
     }
-  }, [routeSlug]);
+  }, [routeSlug, setDistributorBySlug]);
 
   const sponsorSlug = currentDistributor.slug;
   const theme = currentDistributor.theme;
   const distName = currentDistributor.name;
   const distRank = currentDistributor.rank;
+
+  const matchedUser = (usersList || []).find(
+    (u) => 
+      u.role === "distributor" && 
+      (u.referral_code?.toLowerCase() === sponsorSlug.toLowerCase() || u.id.toLowerCase() === sponsorSlug.toLowerCase())
+  );
 
   // Earnings Simulator State
   const [directs, setDirects] = useState(3);

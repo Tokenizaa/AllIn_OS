@@ -7,7 +7,7 @@ import { Switch } from '../../ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../ui/tabs';
 import { Badge } from '../../ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../ui/table';
-import { Settings, Plus, Edit, Trash2, CheckCircle2, XCircle, Key } from 'lucide-react';
+import { Settings, Plus, Edit, Trash2, CheckCircle2, XCircle, Key, Copy, Check } from 'lucide-react';
 
 interface GatewayConfig {
   id: string;
@@ -52,6 +52,7 @@ export function GatewayManagement() {
 
   const [selectedGateway, setSelectedGateway] = useState<GatewayConfig | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleToggleActive = (gatewayId: string) => {
     // TODO: Toggle gateway active status
@@ -287,10 +288,33 @@ export function GatewayManagement() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor={`webhook-url-${gateway.id}`}>Webhook URL</Label>
-                    <Input
-                      id={`webhook-url-${gateway.id}`}
-                      placeholder="https://your-domain.com/api/payments/webhook"
-                    />
+                    <div className="relative">
+                      <Input
+                        id={`webhook-url-${gateway.id}`}
+                        value={typeof window !== 'undefined' ? `${window.location.origin}/api/payments/webhook/${gateway.id}` : `https://api.allinlife.com.br/api/payments/webhook/${gateway.id}`}
+                        readOnly
+                        className="pr-10 font-mono text-xs"
+                      />
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="ghost"
+                        id={`copy-webhook-url-${gateway.id}`}
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent hover:text-foreground text-muted-foreground"
+                        onClick={() => {
+                          const url = typeof window !== 'undefined' ? `${window.location.origin}/api/payments/webhook/${gateway.id}` : `https://api.allinlife.com.br/api/payments/webhook/${gateway.id}`;
+                          navigator.clipboard.writeText(url);
+                          setCopiedId(gateway.id);
+                          setTimeout(() => setCopiedId(null), 2000);
+                        }}
+                      >
+                        {copiedId === gateway.id ? (
+                          <Check className="h-4 w-4 text-emerald-500" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor={`webhook-events-${gateway.id}`}>Events</Label>

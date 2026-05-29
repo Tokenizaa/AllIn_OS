@@ -31,7 +31,7 @@ function ProductDetailPage() {
     if (queryRef) {
       setDistributorBySlug(queryRef);
     }
-  }, [queryRef]);
+  }, [queryRef, setDistributorBySlug]);
 
   const sponsorSlug = currentDistributor.slug;
   const distName = currentDistributor.name;

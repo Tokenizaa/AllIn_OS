@@ -30,13 +30,19 @@ export function DistributorStorePage() {
     if (routeSlug) {
       setDistributorBySlug(routeSlug);
     }
-  }, [routeSlug]);
+  }, [routeSlug, setDistributorBySlug]);
 
   const sponsorSlug = currentDistributor.slug;
   const theme = currentDistributor.theme;
   const distName = currentDistributor.name;
   const distRank = currentDistributor.rank;
   const distAvatar = currentDistributor.avatar;
+
+  const matchedUser = (usersList || []).find(
+    (u) => 
+      u.role === "distributor" && 
+      (u.referral_code?.toLowerCase() === sponsorSlug.toLowerCase() || u.id.toLowerCase() === sponsorSlug.toLowerCase())
+  );
 
   // Cart state
   const [cart, setCart] = useState<Array<{ product: any; quantity: number }>>([]);

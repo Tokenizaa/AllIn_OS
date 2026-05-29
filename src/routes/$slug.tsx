@@ -21,7 +21,7 @@ export function DistributorPage() {
   const params = useParams({ strict: false }) as { slug?: string };
   const { currentDistributor, setDistributorBySlug } = useDistributor();
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, usersList } = useAuth();
   
   // Clean parameter and sync
   const routeSlug = params.slug?.toLowerCase().trim();
@@ -30,13 +30,19 @@ export function DistributorPage() {
     if (routeSlug) {
       setDistributorBySlug(routeSlug);
     }
-  }, [routeSlug]);
+  }, [routeSlug, setDistributorBySlug]);
 
   const sponsorSlug = currentDistributor.slug;
   const theme = currentDistributor.theme;
   const distName = currentDistributor.name;
   const distRank = currentDistributor.rank;
   const distAvatar = currentDistributor.avatar;
+
+  const matchedUser = (usersList || []).find(
+    (u) => 
+      u.role === "distributor" && 
+      (u.referral_code?.toLowerCase() === sponsorSlug.toLowerCase() || u.id.toLowerCase() === sponsorSlug.toLowerCase())
+  );
 
   // Lead captured stats
   const [leadName, setLeadName] = useState("");
