@@ -4,7 +4,7 @@ import {
   BarChart3, Download, User, ShieldCheck, Sparkles, Crown, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/modules/auth";
 import { toast } from "sonner";
 
 const items = [

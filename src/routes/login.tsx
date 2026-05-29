@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/modules/auth";
 import { Eye, EyeOff, ShieldAlert, Sparkles, LogIn, CheckCircle2, Crown, Users, Wallet, Headphones } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";

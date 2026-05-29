@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth, AdminInvite, UserRole } from "@/lib/auth-context";
+import { useAuth, AdminInvite, UserRole } from "@/modules/auth";
 import { 
   Mail, Search, Shield, Plus, CheckCircle2, Clock, XCircle, ShieldOff2,
   Copy, Check, Trash2, Send, RefreshCw, Layers, Checkbox, Info, ToggleLeft, HelpCircle

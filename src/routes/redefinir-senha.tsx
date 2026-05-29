@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/modules/auth";
 import { CheckCircle2, ShieldEllipsis, ShieldAlert } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";

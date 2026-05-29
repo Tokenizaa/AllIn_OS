@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { SidebarNav } from "@/components/app/sidebar-nav";
 import { Topbar } from "@/components/app/topbar";
 import { CopilotDrawer } from "@/components/app/copilot-drawer";
-import { RouteGuard, useAuth } from "@/lib/auth-context";
+import { AuthGuard, useAuth } from "@/modules/auth";
 import { DistributorPage } from "./$slug";
 
 export const Route = createFileRoute("/_app")({
@@ -29,9 +29,9 @@ function AppLayoutSecure() {
   }
 
   return (
-    <RouteGuard allowedRoles={["admin_master", "finance", "support"]}>
+    <AuthGuard allowedRoles={["admin_master", "finance", "support"]}>
       <AppLayout />
-    </RouteGuard>
+    </AuthGuard>
   );
 }
 

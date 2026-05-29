@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/modules/auth";
 import { 
   Eye, EyeOff, ShieldCheck, Mail, User, Lock, AlertTriangle, 
   ShieldAlert, Sparkles, LogIn, ArrowRight, CheckCircle2, RefreshCw 

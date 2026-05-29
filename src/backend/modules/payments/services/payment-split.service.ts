@@ -1,5 +1,5 @@
 import { logger } from '../../../shared/observability/logger.service';
-import { supabase } from '../../../shared/infrastructure/supabase/client';
+import { getSupabaseAdminClient } from '../../../infra/supabase/client';
 
 export interface PaymentSplitConfig {
   recipientId: string;

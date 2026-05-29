@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth, User, UserRole } from "@/lib/auth-context";
+import { useAuth, User, UserRole } from "@/modules/auth";
 import { 
   Users, Search, Shield, Filter, UserX, UserCheck, ShieldAlert,
   Fingerprint, Calendar, ArrowUpDown, ChevronLeft, ChevronRight, Ban
