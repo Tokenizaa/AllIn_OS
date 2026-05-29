@@ -1,5 +1,0 @@
-BEGIN;
-
-ALTER EXTENSION vector SET SCHEMA extensions;
-
-COMMIT;

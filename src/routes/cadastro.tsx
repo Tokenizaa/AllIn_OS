@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useAuth, normalizeUserRole } from "@/lib/auth-context";
+import { useAuth, UserRole } from "@/lib/auth-context";
 import { ShieldCheck, UserPlus, Sparkles, AlertCircle, ArrowRight, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { PublicSiteHeader } from "@/components/public/site-header";
 
 export const Route = createFileRoute("/cadastro")({
   component: RegisterPage,
@@ -29,7 +28,7 @@ function RegisterPage() {
     if (sponsorCode.trim()) {
       const match = usersList.find(
         (u) =>
-          normalizeUserRole(u.role) === "distributor" &&
+          u.role === "distributor" &&
           (u.referral_code?.toLowerCase() === sponsorCode.trim().toLowerCase() ||
             u.id.toLowerCase() === sponsorCode.trim().toLowerCase())
       );
@@ -79,7 +78,7 @@ function RegisterPage() {
 
       toast.success(`Cadastro efetuado com sucesso! Logado como ${userResult.name}.`);
 
-      if (normalizeUserRole(userResult.role) === "distributor") {
+      if (userResult.role === "distributor") {
         navigate({ to: "/ativacao" });
       } else {
         navigate({ to: "/office/store" });
@@ -93,7 +92,6 @@ function RegisterPage() {
 
   return (
     <div className="min-h-screen flex text-foreground bg-[#04060a] relative overflow-hidden">
-      <PublicSiteHeader />
       <div className="absolute top-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-primary/10 blur-[130px] pointer-events-none" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-fuchsia-500/5 blur-[120px] pointer-events-none" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#080c14_1px,transparent_1px),linear-gradient(to_bottom,#080c14_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-40" />

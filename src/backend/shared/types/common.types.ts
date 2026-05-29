@@ -34,7 +34,6 @@ export enum UserRole {
   ADMIN = 'admin',
   OPERATOR = 'operator',
   DISTRIBUTOR = 'distributor',
-  CUSTOMER = 'customer',
 }
 
 export enum Permission {

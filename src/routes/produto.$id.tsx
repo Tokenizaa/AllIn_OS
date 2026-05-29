@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
+import { useDistributor } from "@/lib/distributor-context";
 import { products, formatBRL } from "@/lib/mock-data";
 import { 
   Crown, Star, Heart, ShieldCheck, QrCode, CreditCard, CheckCircle2,
@@ -10,7 +11,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { PublicSiteHeader } from "@/components/public/site-header";
+import { Badge } from "@/components/ui/badge";
+import { PublicHeader } from "@/components/app/public-header";
 
 export const Route = createFileRoute("/produto/$id")({
   component: ProductDetailPage,
@@ -20,39 +22,21 @@ function ProductDetailPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const searchParams = Route.useSearch() as { ref?: string };
-  const { usersList, triggerBinomialBonusPay, addAuditLog } = useAuth();
+  const { triggerBinomialBonusPay, addAuditLog } = useAuth();
+  const { currentDistributor, setDistributorBySlug } = useDistributor();
 
-  // Extract sponsor slug from query ref or default
-  const sponsorSlug = (searchParams?.ref || localStorage.getItem("allin_active_ref") || "marcus").toLowerCase().trim();
+  const queryRef = searchParams?.ref?.toLowerCase().trim();
 
-  // Find distributor match
-  const matchedUser = usersList.find(
-    (u) => 
-      u.role === "distributor" && 
-      (u.referral_code?.toLowerCase() === sponsorSlug || u.id.toLowerCase() === sponsorSlug)
-  );
-
-  const distName = matchedUser?.name || 
-    (sponsorSlug === "mariana.ribeiro" ? "Mariana Ribeiro" :
-     sponsorSlug === "marcus" ? "Marcus Vinícius" :
-     sponsorSlug === "colussi" ? "Dr. Carlos Colussi" :
-     sponsorSlug.charAt(0).toUpperCase() + sponsorSlug.slice(1));
-
-  const distRank = matchedUser?.permissions_list ? "Membro Premium" : 
-    (sponsorSlug === "mariana.ribeiro" ? "Diamante Elite" :
-     sponsorSlug === "marcus" ? "Platinum Supremo" :
-     sponsorSlug === "colussi" ? "Fundador Executivo" : "Distribuidor Autorizado");
-
-  const distAvatar = matchedUser?.avatar || 
-    (sponsorSlug === "mariana.ribeiro" ? "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" :
-     sponsorSlug === "marcus" ? "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200" :
-     sponsorSlug === "colussi" ? "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" :
-     `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(distName)}`);
-
-  // Active sponsor binding
   useEffect(() => {
-    localStorage.setItem("allin_active_ref", sponsorSlug);
-  }, [sponsorSlug]);
+    if (queryRef) {
+      setDistributorBySlug(queryRef);
+    }
+  }, [queryRef]);
+
+  const sponsorSlug = currentDistributor.slug;
+  const distName = currentDistributor.name;
+  const distRank = currentDistributor.rank;
+  const distAvatar = currentDistributor.avatar;
 
   // Find product
   const prod = products.find(p => p.id === id) || products[0];
@@ -120,7 +104,6 @@ function ProductDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#06080d] text-white selection:bg-emerald-500/30 overflow-x-hidden">
-      <PublicSiteHeader />
       
       {/* SPONSOR ANCHOR HEADER DECK */}
       <div className="bg-[#0b1220] border-b border-border/10 px-4 py-2.5 text-center flex items-center justify-center gap-2 text-xs relative z-40">
@@ -137,17 +120,7 @@ function ProductDetailPage() {
       </div>
 
       {/* HEADER NAVBAR */}
-      <nav id="product-navbar" className="relative border-b border-zinc-900 bg-[#06080d]/80 backdrop-blur-md z-40 sticky top-0">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/loja/$slug" params={{ slug: sponsorSlug }} className="inline-flex items-center gap-1 text-xs text-zinc-400 hover:text-white cursor-pointer font-medium pr-3 py-1">
-            <ArrowLeft className="h-3.5 w-3.5" /> Voltar Loja de @{sponsorSlug}
-          </Link>
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">Patente Aprovada</span>
-          </div>
-        </div>
-      </nav>
+      <PublicHeader />
 
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-12">
         

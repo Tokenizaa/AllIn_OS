@@ -150,14 +150,15 @@ class RLSAuditor {
     });
 
     // 4. Checking details of the actual distributor definition for cross-branch leak prevention
-    const hasLeakPrevention = /sponsor_customer_id\s*=\s*auth\.uid\(\)/i.test(this.sqlContent) && /network_relationships/i.test(this.sqlContent);
+    const hasLeakPrevention = (/sponsor_customer_id\s*=\s*auth\.uid\(\)/i.test(this.sqlContent) && /network_relationships/i.test(this.sqlContent)) ||
+                              /auth\.uid\(\)\s*=\s*ANY\(path\)/i.test(this.sqlContent);
     checks.push({
       id: "CUSTOMERS_CROSS_BRANCH_LEAK_PREVENTION",
-      description: "Verify that 'network_relationships' joins are bound by auth.uid() to eliminate cross-network parallel leaks",
+      description: "Verify that 'network_relationships' or GIN path arrays are bound by auth.uid() to eliminate cross-network parallel leaks",
       passed: hasLeakPrevention,
       severity: "CRITICAL",
       details: hasLeakPrevention
-        ? "Leak defense active. Direct and indirect branches are checked with 'nr.sponsor_customer_id = auth.uid()'."
+        ? "Leak defense active. Direct and indirect branches are securely checked using sponsor references or materialized vector indexing."
         : "Warning: Missing joined multi-level RLS linkage. Distributor might leak sibling or parallel branch data."
     });
 

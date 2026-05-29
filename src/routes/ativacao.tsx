@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useAuth, normalizeUserRole } from "@/lib/auth-context";
+import { useAuth } from "@/lib/auth-context";
 import { ShieldAlert, Award, QrCode, CreditCard, ShoppingBag, Sparkles, CheckCircle, ArrowRight, ClipboardCopy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -24,7 +24,7 @@ function ActivationPage() {
     if (!loading) {
       if (!user) {
         navigate({ to: "/login" });
-      } else if (normalizeUserRole(user.role) !== "distributor") {
+      } else if (user.role !== "distributor") {
         navigate({ to: "/" });
       } else if (user.status === "active") {
         navigate({ to: "/office" });

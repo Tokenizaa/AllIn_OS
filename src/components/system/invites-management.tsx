@@ -42,7 +42,7 @@ export function InvitesManagement() {
   // Form states
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [selectedRole, setSelectedRole] = useState<UserRole>("admin");
+  const [selectedRole, setSelectedRole] = useState<UserRole>("gestão_admin");
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
@@ -508,5 +508,3 @@ export function InvitesManagement() {
     </div>
   );
 }
-
-

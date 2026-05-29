@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useAuth, normalizeUserRole } from "@/lib/auth-context";
-import { Eye, EyeOff, Sparkles, LogIn, CheckCircle2, Crown, Users, Wallet, Headphones } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { Eye, EyeOff, ShieldAlert, Sparkles, LogIn, CheckCircle2, Crown, Users, Wallet, Headphones } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { PublicSiteHeader } from "@/components/public/site-header";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -21,23 +20,25 @@ function LoginPage() {
 
   // If already logged in, redirect based on their role
   useEffect(() => {
-    if (!user) return;
+    if (user) {
+      handleRedirect(user);
+    }
+  }, [user]);
 
-    const role = normalizeUserRole(user.role);
-
-    if (role === "distributor") {
-      if (user.status === "pending") {
+  const handleRedirect = (currentUser: any) => {
+    if (currentUser.role === "distributor") {
+      if (currentUser.status === "pending") {
         navigate({ to: "/ativacao" });
       } else {
         navigate({ to: "/office" });
       }
-    } else if (role === "customer") {
+    } else if (currentUser.role === "customer") {
       navigate({ to: "/office/store" }); // Redirect customers to virtual store product panel
     } else {
       // admin, finance, support
       navigate({ to: "/" });
     }
-  }, [user, navigate]);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,14 +51,7 @@ function LoginPage() {
     try {
       const loggedUser = await login(email, password);
       toast.success(`Bem-vindo de volta, ${loggedUser.name}!`);
-      const role = normalizeUserRole(loggedUser.role);
-      if (role === "distributor") {
-        navigate({ to: loggedUser.status === "pending" ? "/ativacao" : "/office" });
-      } else if (role === "customer") {
-        navigate({ to: "/office/store" });
-      } else {
-        navigate({ to: "/" });
-      }
+      handleRedirect(loggedUser);
     } catch (err: any) {
       toast.error(err.message || "Erro ao efetuar login.");
     } finally {
@@ -73,14 +67,7 @@ function LoginPage() {
     try {
       const loggedUser = await login(roleEmail, rolePass);
       toast.success(`Acessado como: ${label}`);
-      const role = normalizeUserRole(loggedUser.role);
-      if (role === "distributor") {
-        navigate({ to: loggedUser.status === "pending" ? "/ativacao" : "/office" });
-      } else if (role === "customer") {
-        navigate({ to: "/office/store" });
-      } else {
-        navigate({ to: "/" });
-      }
+      handleRedirect(loggedUser);
     } catch (err: any) {
       toast.error(err.message);
     } finally {
@@ -90,7 +77,6 @@ function LoginPage() {
 
   return (
     <div className="min-h-screen flex text-foreground bg-[#04060a] relative overflow-hidden">
-      <PublicSiteHeader />
       {/* Background Decorative Gradients */}
       <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-primary/10 blur-[130px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-fuchsia-500/5 blur-[120px] pointer-events-none" />

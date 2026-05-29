@@ -9,32 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SejaDistribuidorRouteImport } from './routes/seja-distribuidor'
-import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
-import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as OfficeRouteImport } from './routes/office'
-import { Route as LojaRouteImport } from './routes/loja'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as DistribuidoresRouteImport } from './routes/distribuidores'
-import { Route as CarrinhoRouteImport } from './routes/carrinho'
-import { Route as CadastroRouteImport } from './routes/cadastro'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AtivacaoRouteImport } from './routes/ativacao'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as OfficeIndexRouteImport } from './routes/office/index'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
-import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
-import { Route as OfficeVerificationRouteImport } from './routes/office/verification'
 import { Route as OfficeStoreRouteImport } from './routes/office/store'
-import { Route as OfficeReportsRouteImport } from './routes/office/reports'
-import { Route as OfficeProfileRouteImport } from './routes/office/profile'
 import { Route as OfficePlanRouteImport } from './routes/office/plan'
 import { Route as OfficeOrdersRouteImport } from './routes/office/orders'
-import { Route as OfficeNetworkRouteImport } from './routes/office/network'
 import { Route as OfficeFinanceRouteImport } from './routes/office/finance'
-import { Route as OfficeDownloadsRouteImport } from './routes/office/downloads'
-import { Route as OfficeCopilotRouteImport } from './routes/office/copilot'
 import { Route as AppWalletsRouteImport } from './routes/_app/wallets'
 import { Route as AppSystemRouteImport } from './routes/_app/system'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
@@ -42,7 +24,6 @@ import { Route as AppPlansRouteImport } from './routes/_app/plans'
 import { Route as AppNetworkRouteImport } from './routes/_app/network'
 import { Route as AppMarketingRouteImport } from './routes/_app/marketing'
 import { Route as AppInsightsRouteImport } from './routes/_app/insights'
-import { Route as AppEvolutionRouteImport } from './routes/_app/evolution'
 import { Route as AppCopilotRouteImport } from './routes/_app/copilot'
 import { Route as AppCommissionsRouteImport } from './routes/_app/commissions'
 import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
@@ -50,67 +31,11 @@ import { Route as AppAlertsRouteImport } from './routes/_app/alerts'
 import { Route as AppProductsIndexRouteImport } from './routes/_app/products/index'
 import { Route as AppOrdersIndexRouteImport } from './routes/_app/orders/index'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app/customers/index'
-import { Route as AuthInviteTokenRouteImport } from './routes/auth.invite.$token'
 import { Route as AppCustomersIdRouteImport } from './routes/_app/customers/$id'
 
-const SejaDistribuidorRoute = SejaDistribuidorRouteImport.update({
-  id: '/seja-distribuidor',
-  path: '/seja-distribuidor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
-  id: '/redefinir-senha',
-  path: '/redefinir-senha',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecuperarSenhaRoute = RecuperarSenhaRouteImport.update({
-  id: '/recuperar-senha',
-  path: '/recuperar-senha',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const OfficeRoute = OfficeRouteImport.update({
   id: '/office',
   path: '/office',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LojaRoute = LojaRouteImport.update({
-  id: '/loja',
-  path: '/loja',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DistribuidoresRoute = DistribuidoresRouteImport.update({
-  id: '/distribuidores',
-  path: '/distribuidores',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CarrinhoRoute = CarrinhoRouteImport.update({
-  id: '/carrinho',
-  path: '/carrinho',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CadastroRoute = CadastroRouteImport.update({
-  id: '/cadastro',
-  path: '/cadastro',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AtivacaoRoute = AtivacaoRouteImport.update({
-  id: '/ativacao',
-  path: '/ativacao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -127,29 +52,9 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const ProdutoIdRoute = ProdutoIdRouteImport.update({
-  id: '/produto/$id',
-  path: '/produto/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OfficeVerificationRoute = OfficeVerificationRouteImport.update({
-  id: '/verification',
-  path: '/verification',
-  getParentRoute: () => OfficeRoute,
-} as any)
 const OfficeStoreRoute = OfficeStoreRouteImport.update({
   id: '/store',
   path: '/store',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const OfficeReportsRoute = OfficeReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const OfficeProfileRoute = OfficeProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => OfficeRoute,
 } as any)
 const OfficePlanRoute = OfficePlanRouteImport.update({
@@ -162,24 +67,9 @@ const OfficeOrdersRoute = OfficeOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => OfficeRoute,
 } as any)
-const OfficeNetworkRoute = OfficeNetworkRouteImport.update({
-  id: '/network',
-  path: '/network',
-  getParentRoute: () => OfficeRoute,
-} as any)
 const OfficeFinanceRoute = OfficeFinanceRouteImport.update({
   id: '/finance',
   path: '/finance',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const OfficeDownloadsRoute = OfficeDownloadsRouteImport.update({
-  id: '/downloads',
-  path: '/downloads',
-  getParentRoute: () => OfficeRoute,
-} as any)
-const OfficeCopilotRoute = OfficeCopilotRouteImport.update({
-  id: '/copilot',
-  path: '/copilot',
   getParentRoute: () => OfficeRoute,
 } as any)
 const AppWalletsRoute = AppWalletsRouteImport.update({
@@ -217,11 +107,6 @@ const AppInsightsRoute = AppInsightsRouteImport.update({
   path: '/insights',
   getParentRoute: () => AppRoute,
 } as any)
-const AppEvolutionRoute = AppEvolutionRouteImport.update({
-  id: '/evolution',
-  path: '/evolution',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppCopilotRoute = AppCopilotRouteImport.update({
   id: '/copilot',
   path: '/copilot',
@@ -257,11 +142,6 @@ const AppCustomersIndexRoute = AppCustomersIndexRouteImport.update({
   path: '/customers/',
   getParentRoute: () => AppRoute,
 } as any)
-const AuthInviteTokenRoute = AuthInviteTokenRouteImport.update({
-  id: '/invite/$token',
-  path: '/invite/$token',
-  getParentRoute: () => AuthRoute,
-} as any)
 const AppCustomersIdRoute = AppCustomersIdRouteImport.update({
   id: '/customers/$id',
   path: '/customers/$id',
@@ -270,23 +150,11 @@ const AppCustomersIdRoute = AppCustomersIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
-  '/ativacao': typeof AtivacaoRoute
-  '/auth': typeof AuthRouteWithChildren
-  '/cadastro': typeof CadastroRoute
-  '/carrinho': typeof CarrinhoRoute
-  '/distribuidores': typeof DistribuidoresRoute
-  '/home': typeof HomeRoute
-  '/login': typeof LoginRoute
-  '/loja': typeof LojaRoute
   '/office': typeof OfficeRouteWithChildren
-  '/recuperar-senha': typeof RecuperarSenhaRoute
-  '/redefinir-senha': typeof RedefinirSenhaRoute
-  '/seja-distribuidor': typeof SejaDistribuidorRoute
   '/alerts': typeof AppAlertsRoute
   '/analytics': typeof AppAnalyticsRoute
   '/commissions': typeof AppCommissionsRoute
   '/copilot': typeof AppCopilotRoute
-  '/evolution': typeof AppEvolutionRoute
   '/insights': typeof AppInsightsRoute
   '/marketing': typeof AppMarketingRoute
   '/network': typeof AppNetworkRoute
@@ -294,41 +162,21 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRoute
   '/system': typeof AppSystemRoute
   '/wallets': typeof AppWalletsRoute
-  '/office/copilot': typeof OfficeCopilotRoute
-  '/office/downloads': typeof OfficeDownloadsRoute
   '/office/finance': typeof OfficeFinanceRoute
-  '/office/network': typeof OfficeNetworkRoute
   '/office/orders': typeof OfficeOrdersRoute
   '/office/plan': typeof OfficePlanRoute
-  '/office/profile': typeof OfficeProfileRoute
-  '/office/reports': typeof OfficeReportsRoute
   '/office/store': typeof OfficeStoreRoute
-  '/office/verification': typeof OfficeVerificationRoute
-  '/produto/$id': typeof ProdutoIdRoute
   '/office/': typeof OfficeIndexRoute
   '/customers/$id': typeof AppCustomersIdRoute
-  '/auth/invite/$token': typeof AuthInviteTokenRoute
   '/customers/': typeof AppCustomersIndexRoute
   '/orders/': typeof AppOrdersIndexRoute
   '/products/': typeof AppProductsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/ativacao': typeof AtivacaoRoute
-  '/auth': typeof AuthRouteWithChildren
-  '/cadastro': typeof CadastroRoute
-  '/carrinho': typeof CarrinhoRoute
-  '/distribuidores': typeof DistribuidoresRoute
-  '/home': typeof HomeRoute
-  '/login': typeof LoginRoute
-  '/loja': typeof LojaRoute
-  '/recuperar-senha': typeof RecuperarSenhaRoute
-  '/redefinir-senha': typeof RedefinirSenhaRoute
-  '/seja-distribuidor': typeof SejaDistribuidorRoute
   '/alerts': typeof AppAlertsRoute
   '/analytics': typeof AppAnalyticsRoute
   '/commissions': typeof AppCommissionsRoute
   '/copilot': typeof AppCopilotRoute
-  '/evolution': typeof AppEvolutionRoute
   '/insights': typeof AppInsightsRoute
   '/marketing': typeof AppMarketingRoute
   '/network': typeof AppNetworkRoute
@@ -336,21 +184,13 @@ export interface FileRoutesByTo {
   '/settings': typeof AppSettingsRoute
   '/system': typeof AppSystemRoute
   '/wallets': typeof AppWalletsRoute
-  '/office/copilot': typeof OfficeCopilotRoute
-  '/office/downloads': typeof OfficeDownloadsRoute
   '/office/finance': typeof OfficeFinanceRoute
-  '/office/network': typeof OfficeNetworkRoute
   '/office/orders': typeof OfficeOrdersRoute
   '/office/plan': typeof OfficePlanRoute
-  '/office/profile': typeof OfficeProfileRoute
-  '/office/reports': typeof OfficeReportsRoute
   '/office/store': typeof OfficeStoreRoute
-  '/office/verification': typeof OfficeVerificationRoute
-  '/produto/$id': typeof ProdutoIdRoute
   '/': typeof AppIndexRoute
   '/office': typeof OfficeIndexRoute
   '/customers/$id': typeof AppCustomersIdRoute
-  '/auth/invite/$token': typeof AuthInviteTokenRoute
   '/customers': typeof AppCustomersIndexRoute
   '/orders': typeof AppOrdersIndexRoute
   '/products': typeof AppProductsIndexRoute
@@ -358,23 +198,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
-  '/ativacao': typeof AtivacaoRoute
-  '/auth': typeof AuthRouteWithChildren
-  '/cadastro': typeof CadastroRoute
-  '/carrinho': typeof CarrinhoRoute
-  '/distribuidores': typeof DistribuidoresRoute
-  '/home': typeof HomeRoute
-  '/login': typeof LoginRoute
-  '/loja': typeof LojaRoute
   '/office': typeof OfficeRouteWithChildren
-  '/recuperar-senha': typeof RecuperarSenhaRoute
-  '/redefinir-senha': typeof RedefinirSenhaRoute
-  '/seja-distribuidor': typeof SejaDistribuidorRoute
   '/_app/alerts': typeof AppAlertsRoute
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/commissions': typeof AppCommissionsRoute
   '/_app/copilot': typeof AppCopilotRoute
-  '/_app/evolution': typeof AppEvolutionRoute
   '/_app/insights': typeof AppInsightsRoute
   '/_app/marketing': typeof AppMarketingRoute
   '/_app/network': typeof AppNetworkRoute
@@ -382,21 +210,13 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRoute
   '/_app/system': typeof AppSystemRoute
   '/_app/wallets': typeof AppWalletsRoute
-  '/office/copilot': typeof OfficeCopilotRoute
-  '/office/downloads': typeof OfficeDownloadsRoute
   '/office/finance': typeof OfficeFinanceRoute
-  '/office/network': typeof OfficeNetworkRoute
   '/office/orders': typeof OfficeOrdersRoute
   '/office/plan': typeof OfficePlanRoute
-  '/office/profile': typeof OfficeProfileRoute
-  '/office/reports': typeof OfficeReportsRoute
   '/office/store': typeof OfficeStoreRoute
-  '/office/verification': typeof OfficeVerificationRoute
-  '/produto/$id': typeof ProdutoIdRoute
   '/_app/': typeof AppIndexRoute
   '/office/': typeof OfficeIndexRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
-  '/auth/invite/$token': typeof AuthInviteTokenRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
   '/_app/orders/': typeof AppOrdersIndexRoute
   '/_app/products/': typeof AppProductsIndexRoute
@@ -405,23 +225,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/ativacao'
-    | '/auth'
-    | '/cadastro'
-    | '/carrinho'
-    | '/distribuidores'
-    | '/home'
-    | '/login'
-    | '/loja'
     | '/office'
-    | '/recuperar-senha'
-    | '/redefinir-senha'
-    | '/seja-distribuidor'
     | '/alerts'
     | '/analytics'
     | '/commissions'
     | '/copilot'
-    | '/evolution'
     | '/insights'
     | '/marketing'
     | '/network'
@@ -429,41 +237,21 @@ export interface FileRouteTypes {
     | '/settings'
     | '/system'
     | '/wallets'
-    | '/office/copilot'
-    | '/office/downloads'
     | '/office/finance'
-    | '/office/network'
     | '/office/orders'
     | '/office/plan'
-    | '/office/profile'
-    | '/office/reports'
     | '/office/store'
-    | '/office/verification'
-    | '/produto/$id'
     | '/office/'
     | '/customers/$id'
-    | '/auth/invite/$token'
     | '/customers/'
     | '/orders/'
     | '/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/ativacao'
-    | '/auth'
-    | '/cadastro'
-    | '/carrinho'
-    | '/distribuidores'
-    | '/home'
-    | '/login'
-    | '/loja'
-    | '/recuperar-senha'
-    | '/redefinir-senha'
-    | '/seja-distribuidor'
     | '/alerts'
     | '/analytics'
     | '/commissions'
     | '/copilot'
-    | '/evolution'
     | '/insights'
     | '/marketing'
     | '/network'
@@ -471,44 +259,24 @@ export interface FileRouteTypes {
     | '/settings'
     | '/system'
     | '/wallets'
-    | '/office/copilot'
-    | '/office/downloads'
     | '/office/finance'
-    | '/office/network'
     | '/office/orders'
     | '/office/plan'
-    | '/office/profile'
-    | '/office/reports'
     | '/office/store'
-    | '/office/verification'
-    | '/produto/$id'
     | '/'
     | '/office'
     | '/customers/$id'
-    | '/auth/invite/$token'
     | '/customers'
     | '/orders'
     | '/products'
   id:
     | '__root__'
     | '/_app'
-    | '/ativacao'
-    | '/auth'
-    | '/cadastro'
-    | '/carrinho'
-    | '/distribuidores'
-    | '/home'
-    | '/login'
-    | '/loja'
     | '/office'
-    | '/recuperar-senha'
-    | '/redefinir-senha'
-    | '/seja-distribuidor'
     | '/_app/alerts'
     | '/_app/analytics'
     | '/_app/commissions'
     | '/_app/copilot'
-    | '/_app/evolution'
     | '/_app/insights'
     | '/_app/marketing'
     | '/_app/network'
@@ -516,21 +284,13 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/system'
     | '/_app/wallets'
-    | '/office/copilot'
-    | '/office/downloads'
     | '/office/finance'
-    | '/office/network'
     | '/office/orders'
     | '/office/plan'
-    | '/office/profile'
-    | '/office/reports'
     | '/office/store'
-    | '/office/verification'
-    | '/produto/$id'
     | '/_app/'
     | '/office/'
     | '/_app/customers/$id'
-    | '/auth/invite/$token'
     | '/_app/customers/'
     | '/_app/orders/'
     | '/_app/products/'
@@ -538,105 +298,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
-  AtivacaoRoute: typeof AtivacaoRoute
-  AuthRoute: typeof AuthRouteWithChildren
-  CadastroRoute: typeof CadastroRoute
-  CarrinhoRoute: typeof CarrinhoRoute
-  DistribuidoresRoute: typeof DistribuidoresRoute
-  HomeRoute: typeof HomeRoute
-  LoginRoute: typeof LoginRoute
-  LojaRoute: typeof LojaRoute
   OfficeRoute: typeof OfficeRouteWithChildren
-  RecuperarSenhaRoute: typeof RecuperarSenhaRoute
-  RedefinirSenhaRoute: typeof RedefinirSenhaRoute
-  SejaDistribuidorRoute: typeof SejaDistribuidorRoute
-  ProdutoIdRoute: typeof ProdutoIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/seja-distribuidor': {
-      id: '/seja-distribuidor'
-      path: '/seja-distribuidor'
-      fullPath: '/seja-distribuidor'
-      preLoaderRoute: typeof SejaDistribuidorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/redefinir-senha': {
-      id: '/redefinir-senha'
-      path: '/redefinir-senha'
-      fullPath: '/redefinir-senha'
-      preLoaderRoute: typeof RedefinirSenhaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recuperar-senha': {
-      id: '/recuperar-senha'
-      path: '/recuperar-senha'
-      fullPath: '/recuperar-senha'
-      preLoaderRoute: typeof RecuperarSenhaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/office': {
       id: '/office'
       path: '/office'
       fullPath: '/office'
       preLoaderRoute: typeof OfficeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/loja': {
-      id: '/loja'
-      path: '/loja'
-      fullPath: '/loja'
-      preLoaderRoute: typeof LojaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/distribuidores': {
-      id: '/distribuidores'
-      path: '/distribuidores'
-      fullPath: '/distribuidores'
-      preLoaderRoute: typeof DistribuidoresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/carrinho': {
-      id: '/carrinho'
-      path: '/carrinho'
-      fullPath: '/carrinho'
-      preLoaderRoute: typeof CarrinhoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cadastro': {
-      id: '/cadastro'
-      path: '/cadastro'
-      fullPath: '/cadastro'
-      preLoaderRoute: typeof CadastroRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ativacao': {
-      id: '/ativacao'
-      path: '/ativacao'
-      fullPath: '/ativacao'
-      preLoaderRoute: typeof AtivacaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app': {
@@ -660,39 +331,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/produto/$id': {
-      id: '/produto/$id'
-      path: '/produto/$id'
-      fullPath: '/produto/$id'
-      preLoaderRoute: typeof ProdutoIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/office/verification': {
-      id: '/office/verification'
-      path: '/verification'
-      fullPath: '/office/verification'
-      preLoaderRoute: typeof OfficeVerificationRouteImport
-      parentRoute: typeof OfficeRoute
-    }
     '/office/store': {
       id: '/office/store'
       path: '/store'
       fullPath: '/office/store'
       preLoaderRoute: typeof OfficeStoreRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/office/reports': {
-      id: '/office/reports'
-      path: '/reports'
-      fullPath: '/office/reports'
-      preLoaderRoute: typeof OfficeReportsRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/office/profile': {
-      id: '/office/profile'
-      path: '/profile'
-      fullPath: '/office/profile'
-      preLoaderRoute: typeof OfficeProfileRouteImport
       parentRoute: typeof OfficeRoute
     }
     '/office/plan': {
@@ -709,32 +352,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OfficeOrdersRouteImport
       parentRoute: typeof OfficeRoute
     }
-    '/office/network': {
-      id: '/office/network'
-      path: '/network'
-      fullPath: '/office/network'
-      preLoaderRoute: typeof OfficeNetworkRouteImport
-      parentRoute: typeof OfficeRoute
-    }
     '/office/finance': {
       id: '/office/finance'
       path: '/finance'
       fullPath: '/office/finance'
       preLoaderRoute: typeof OfficeFinanceRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/office/downloads': {
-      id: '/office/downloads'
-      path: '/downloads'
-      fullPath: '/office/downloads'
-      preLoaderRoute: typeof OfficeDownloadsRouteImport
-      parentRoute: typeof OfficeRoute
-    }
-    '/office/copilot': {
-      id: '/office/copilot'
-      path: '/copilot'
-      fullPath: '/office/copilot'
-      preLoaderRoute: typeof OfficeCopilotRouteImport
       parentRoute: typeof OfficeRoute
     }
     '/_app/wallets': {
@@ -786,13 +408,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInsightsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/evolution': {
-      id: '/_app/evolution'
-      path: '/evolution'
-      fullPath: '/evolution'
-      preLoaderRoute: typeof AppEvolutionRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/copilot': {
       id: '/_app/copilot'
       path: '/copilot'
@@ -842,13 +457,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCustomersIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/auth/invite/$token': {
-      id: '/auth/invite/$token'
-      path: '/invite/$token'
-      fullPath: '/auth/invite/$token'
-      preLoaderRoute: typeof AuthInviteTokenRouteImport
-      parentRoute: typeof AuthRoute
-    }
     '/_app/customers/$id': {
       id: '/_app/customers/$id'
       path: '/customers/$id'
@@ -864,7 +472,6 @@ interface AppRouteChildren {
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppCommissionsRoute: typeof AppCommissionsRoute
   AppCopilotRoute: typeof AppCopilotRoute
-  AppEvolutionRoute: typeof AppEvolutionRoute
   AppInsightsRoute: typeof AppInsightsRoute
   AppMarketingRoute: typeof AppMarketingRoute
   AppNetworkRoute: typeof AppNetworkRoute
@@ -884,7 +491,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppCommissionsRoute: AppCommissionsRoute,
   AppCopilotRoute: AppCopilotRoute,
-  AppEvolutionRoute: AppEvolutionRoute,
   AppInsightsRoute: AppInsightsRoute,
   AppMarketingRoute: AppMarketingRoute,
   AppNetworkRoute: AppNetworkRoute,
@@ -901,41 +507,19 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
-interface AuthRouteChildren {
-  AuthInviteTokenRoute: typeof AuthInviteTokenRoute
-}
-
-const AuthRouteChildren: AuthRouteChildren = {
-  AuthInviteTokenRoute: AuthInviteTokenRoute,
-}
-
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
-
 interface OfficeRouteChildren {
-  OfficeCopilotRoute: typeof OfficeCopilotRoute
-  OfficeDownloadsRoute: typeof OfficeDownloadsRoute
   OfficeFinanceRoute: typeof OfficeFinanceRoute
-  OfficeNetworkRoute: typeof OfficeNetworkRoute
   OfficeOrdersRoute: typeof OfficeOrdersRoute
   OfficePlanRoute: typeof OfficePlanRoute
-  OfficeProfileRoute: typeof OfficeProfileRoute
-  OfficeReportsRoute: typeof OfficeReportsRoute
   OfficeStoreRoute: typeof OfficeStoreRoute
-  OfficeVerificationRoute: typeof OfficeVerificationRoute
   OfficeIndexRoute: typeof OfficeIndexRoute
 }
 
 const OfficeRouteChildren: OfficeRouteChildren = {
-  OfficeCopilotRoute: OfficeCopilotRoute,
-  OfficeDownloadsRoute: OfficeDownloadsRoute,
   OfficeFinanceRoute: OfficeFinanceRoute,
-  OfficeNetworkRoute: OfficeNetworkRoute,
   OfficeOrdersRoute: OfficeOrdersRoute,
   OfficePlanRoute: OfficePlanRoute,
-  OfficeProfileRoute: OfficeProfileRoute,
-  OfficeReportsRoute: OfficeReportsRoute,
   OfficeStoreRoute: OfficeStoreRoute,
-  OfficeVerificationRoute: OfficeVerificationRoute,
   OfficeIndexRoute: OfficeIndexRoute,
 }
 
@@ -944,30 +528,8 @@ const OfficeRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
-  AtivacaoRoute: AtivacaoRoute,
-  AuthRoute: AuthRouteWithChildren,
-  CadastroRoute: CadastroRoute,
-  CarrinhoRoute: CarrinhoRoute,
-  DistribuidoresRoute: DistribuidoresRoute,
-  HomeRoute: HomeRoute,
-  LoginRoute: LoginRoute,
-  LojaRoute: LojaRoute,
   OfficeRoute: OfficeRouteWithChildren,
-  RecuperarSenhaRoute: RecuperarSenhaRoute,
-  RedefinirSenhaRoute: RedefinirSenhaRoute,
-  SejaDistribuidorRoute: SejaDistribuidorRoute,
-  ProdutoIdRoute: ProdutoIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

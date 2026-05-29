@@ -3,16 +3,11 @@ import { LoginDto, RegisterDto, RefreshTokenDto, ChangePasswordDto, AuthResponse
 import { CustomerRepository } from "../../customers/repositories/customer.repository";
 import { UserRole } from "../../../shared/types/common.types";
 
-// JWT configuration - these MUST be set in environment variables
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+// In production, these should be in environment variables
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "your-refresh-secret";
 const JWT_EXPIRES_IN = "1h";
 const JWT_REFRESH_EXPIRES_IN = "7d";
-
-// Validate required environment variables
-if (!JWT_SECRET || !JWT_REFRESH_SECRET) {
-  throw new Error("JWT_SECRET and JWT_REFRESH_SECRET must be set in environment variables");
-}
 
 export class AuthService {
   private customerRepository: CustomerRepository;
@@ -35,8 +30,8 @@ export class AuthService {
     //   throw new Error("Invalid credentials");
     // }
 
-    const role = this.resolveRole(customer);
-    const accessToken = this.generateAccessToken(customer.id, customer.email, role);
+    // Generate tokens
+    const accessToken = this.generateAccessToken(customer.id, customer.email, "distributor");
     const refreshToken = this.generateRefreshToken(customer.id);
 
     return {
@@ -44,7 +39,7 @@ export class AuthService {
         id: customer.id,
         name: customer.name,
         email: customer.email,
-        role,
+        role: "distributor", // In production, get from database
       },
       accessToken,
       refreshToken,
@@ -82,8 +77,8 @@ export class AuthService {
       updated_at: new Date().toISOString(),
     });
 
-    const role = this.resolveRole(customer);
-    const accessToken = this.generateAccessToken(customer.id, customer.email, role);
+    // Generate tokens
+    const accessToken = this.generateAccessToken(customer.id, customer.email, "distributor");
     const refreshToken = this.generateRefreshToken(customer.id);
 
     return {
@@ -91,7 +86,7 @@ export class AuthService {
         id: customer.id,
         name: customer.name,
         email: customer.email,
-        role,
+        role: "distributor",
       },
       accessToken,
       refreshToken,
@@ -110,8 +105,8 @@ export class AuthService {
         throw new Error("Invalid refresh token");
       }
 
-      const role = this.resolveRole(customer);
-      const accessToken = this.generateAccessToken(customer.id, customer.email, role);
+      // Generate new tokens
+      const accessToken = this.generateAccessToken(customer.id, customer.email, "distributor");
       const refreshToken = this.generateRefreshToken(customer.id);
 
       return {
@@ -119,7 +114,7 @@ export class AuthService {
           id: customer.id,
           name: customer.name,
           email: customer.email,
-          role,
+          role: "distributor",
         },
         accessToken,
         refreshToken,
@@ -170,20 +165,6 @@ export class AuthService {
       JWT_REFRESH_SECRET,
       { expiresIn: JWT_REFRESH_EXPIRES_IN }
     );
-  }
-
-  private resolveRole(customer: { role?: string; customer_type?: string; plan_id?: string }): UserRole {
-    const candidate = (customer.role || customer.customer_type || "").toLowerCase();
-
-    if (candidate === "admin" || candidate === "operator" || candidate === "distributor" || candidate === "customer") {
-      return candidate as UserRole;
-    }
-
-    if (candidate === "final" || candidate === "cliente" || candidate === "customer_final") {
-      return UserRole.CUSTOMER;
-    }
-
-    return customer.plan_id ? UserRole.DISTRIBUTOR : UserRole.CUSTOMER;
   }
 
   verifyAccessToken(token: string): { userId: string; email: string; role: string } {

@@ -1,8 +1,6 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { DistributorRecruitmentPage } from "./seja-distribuidor.$slug";
 
 export const Route = createFileRoute("/seja-distribuidor")({
-  beforeLoad: () => {
-    const defaultSlug = import.meta.env.VITE_DEFAULT_DISTRIBUTOR_SLUG || "allinBrasil";
-    throw redirect({ to: `/seja-distribuidor/${defaultSlug}` });
-  },
+  component: DistributorRecruitmentPage,
 });

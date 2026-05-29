@@ -4,9 +4,11 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  ScrollRestoration,
 } from "@tanstack/react-router";
 
 import { AuthProvider } from "../lib/auth-context";
+import { DistributorProvider } from "../lib/distributor-context";
 import "../styles.css";
 
 function NotFoundComponent() {
@@ -78,7 +80,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
+        <DistributorProvider>
+          <Outlet />
+          <ScrollRestoration />
+        </DistributorProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

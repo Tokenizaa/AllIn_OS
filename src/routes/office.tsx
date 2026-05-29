@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { OfficeSidebar } from "@/components/distributor/sidebar";
 import { OfficeTopbar } from "@/components/distributor/topbar";
-import { RouteGuard } from "@/lib/auth-guards";
+import { RouteGuard } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/office")({
   component: OfficeLayoutSecure,

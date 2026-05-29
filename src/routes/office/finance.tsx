@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/distributor/stat-card";
 import { wallet, bonusOrigin, formatBRL } from "@/lib/distributor-data";
 import { ResponsiveContainer, Tooltip, Cell, Pie, PieChart, Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { SectionBreadcrumbs } from "@/components/navigation/section-breadcrumbs";
 
 export const Route = createFileRoute("/office/finance")({ component: FinancePage });
 
@@ -25,12 +24,6 @@ const extrato = [
 function FinancePage() {
   return (
     <div className="space-y-6">
-      <SectionBreadcrumbs
-        items={[
-          { label: "Office", to: "/office" },
-          { label: "Financeiro" },
-        ]}
-      />
       <div className="flex items-end justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Financeiro</h1>
