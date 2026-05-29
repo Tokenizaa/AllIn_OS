@@ -1,6 +1,40 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 
+const getOrigin = () => {
+  return typeof window !== 'undefined' ? window.location.origin : 'https://allin.io';
+};
+
+const isClient = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
+const safeGetItem = (key: string): string | null => {
+  if (!isClient) return null;
+  try {
+    return localStorage.getItem(key);
+  } catch (e) {
+    console.error('Error reading from localStorage:', e);
+    return null;
+  }
+};
+
+const safeSetItem = (key: string, value: string): void => {
+  if (!isClient) return;
+  try {
+    localStorage.setItem(key, value);
+  } catch (e) {
+    console.error('Error writing to localStorage:', e);
+  }
+};
+
+const safeRemoveItem = (key: string): void => {
+  if (!isClient) return;
+  try {
+    localStorage.removeItem(key);
+  } catch (e) {
+    console.error('Error removing from localStorage:', e);
+  }
+};
+
 // --- TYPES & INTERFACES ---
 
 export type UserRole = 
@@ -368,7 +402,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const saveInvitesDB = (newInvites: AdminInvite[]) => {
     setAdminInvites(newInvites);
-    localStorage.setItem("allin_invites", JSON.stringify(newInvites));
+    safeSetItem("allin_invites", JSON.stringify(newInvites));
   };
 
   // Init loads
@@ -396,7 +430,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.error("Error parsing stored users, resetting:", e);
         }
       } else {
-        localStorage.setItem("allin_users", JSON.stringify(DEFAULT_USERS));
+        safeSetItem("allin_users", JSON.stringify(DEFAULT_USERS));
       }
 
       if (storedDistributors) {
@@ -409,7 +443,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.error("Error parsing stored distributors, resetting:", e);
         }
       } else {
-        localStorage.setItem("allin_distributors", JSON.stringify(DEFAULT_DISTRIBUTORS));
+        safeSetItem("allin_distributors", JSON.stringify(DEFAULT_DISTRIBUTORS));
       }
 
       if (storedReferrals) {
@@ -422,7 +456,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.error("Error parsing stored referrals, resetting:", e);
         }
       } else {
-        localStorage.setItem("allin_referrals", JSON.stringify(DEFAULT_REFERRALS));
+        safeSetItem("allin_referrals", JSON.stringify(DEFAULT_REFERRALS));
       }
 
       if (storedLogs) {
@@ -435,7 +469,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.error("Error parsing stored audit logs, resetting:", e);
         }
       } else {
-        localStorage.setItem("allin_audit_logs", JSON.stringify(DEFAULT_AUDIT_LOGS));
+        safeSetItem("allin_audit_logs", JSON.stringify(DEFAULT_AUDIT_LOGS));
       }
 
       // Load or initialize admin invites
@@ -476,7 +510,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             role: "suporte",
             permissions: ["support", "orders"],
             invite_token: "token-suporte-gabriel",
-            invite_link: `${window.location.origin}/auth/invite/token-suporte-gabriel`,
+            invite_link: `${getOrigin()}/auth/invite/token-suporte-gabriel`,
             invited_by: "admin@allin.io",
             expires_at: new Date(Date.now() + 3 * 24 * 3600000).toISOString(),
             status: "pending",
@@ -503,7 +537,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             role: "marketing",
             permissions: ["marketing"],
             invite_token: "token-fernanda-revoked",
-            invite_link: `${window.location.origin}/auth/invite/token-fernanda-revoked`,
+            invite_link: `${getOrigin()}/auth/invite/token-fernanda-revoked`,
             invited_by: "admin@allin.io",
             expires_at: new Date(Date.now() + 5 * 24 * 3600000).toISOString(),
             revoked_at: new Date(Date.now() - 1 * 24 * 3600000).toISOString(),
@@ -511,7 +545,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             created_at: new Date(Date.now() - 2 * 24 * 3600000).toISOString()
           }
         ];
-        localStorage.setItem("allin_invites", JSON.stringify(initialInvites));
+        safeSetItem("allin_invites", JSON.stringify(initialInvites));
       }
 
       // Dynamic expiry check for all pending invites
@@ -529,7 +563,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setAdminInvites(checkedInvites);
 
       // 2. Fetch Session from LocalStorage
-      const savedSession = localStorage.getItem("allin_session");
+      const savedSession = safeGetItem("allin_session");
       if (savedSession && savedSession !== "undefined") {
         try {
           const parsedUser = JSON.parse(savedSession) as User;
@@ -550,9 +584,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // 3. Process URL sponsor tracking (on load)
-      const params = new URLSearchParams(window.location.search);
+      const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
       const refParam = params.get("ref");
-      const currentPath = window.location.pathname;
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
       
       // Check if path is e.g. /loja/ref/marcus or if query ?ref=marcus exists
       let potentialSponsor = refParam;
@@ -575,19 +609,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setActiveSponsor(validDist.referral_code || validDist.id);
           const meta = {
             clicked_at: new Date().toISOString(),
-            landing_url: window.location.href,
+            landing_url: typeof window !== 'undefined' ? window.location.href : '',
             referrer_code: cleanRef,
             device: typeof navigator !== "undefined" ? navigator.userAgent : "ssr"
           };
           setActiveReferralMetadata(meta);
-          localStorage.setItem("allin_active_ref", cleanRef);
-          localStorage.setItem("allin_active_ref_meta", JSON.stringify(meta));
+          safeSetItem("allin_active_ref", cleanRef);
+          safeSetItem("allin_active_ref_meta", JSON.stringify(meta));
           console.log(`[Referral System] Sponsor Intercepted: active sponsor is now ${cleanRef}`);
         }
       } else {
         // Check cached active sponsor
-        const cachedRef = localStorage.getItem("allin_active_ref");
-        const cachedMeta = localStorage.getItem("allin_active_ref_meta");
+        const cachedRef = safeGetItem("allin_active_ref");
+        const cachedMeta = safeGetItem("allin_active_ref_meta");
         if (cachedRef) {
           setActiveSponsor(cachedRef);
         }
@@ -595,7 +629,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           try {
             setActiveReferralMetadata(JSON.parse(cachedMeta));
           } catch (e) {
-            localStorage.removeItem("allin_active_ref_meta");
+            safeRemoveItem("allin_active_ref_meta");
           }
         }
       }
@@ -610,22 +644,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Sync state helpers to persistent local db
   const saveUsersDB = (newUsers: User[]) => {
     setUsersList(newUsers);
-    localStorage.setItem("allin_users", JSON.stringify(newUsers));
+    safeSetItem("allin_users", JSON.stringify(newUsers));
   };
 
   const saveDistributorsDB = (newDists: DistributorProfile[]) => {
     setDistributorsList(newDists);
-    localStorage.setItem("allin_distributors", JSON.stringify(newDists));
+    safeSetItem("allin_distributors", JSON.stringify(newDists));
   };
 
   const saveReferralsDB = (newRefs: CustomerReferral[]) => {
     setReferralsList(newRefs);
-    localStorage.setItem("allin_referrals", JSON.stringify(newRefs));
+    safeSetItem("allin_referrals", JSON.stringify(newRefs));
   };
 
   const saveLogsDB = (newLogs: AuditLog[]) => {
     setAuditLogs(newLogs);
-    localStorage.setItem("allin_audit_logs", JSON.stringify(newLogs));
+    safeSetItem("allin_audit_logs", JSON.stringify(newLogs));
   };
 
   // --- LOGGERS & EVENTS ---
@@ -718,7 +752,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     saveUsersDB(updatedUsers);
 
     setUser(updatedUser);
-    localStorage.setItem("allin_session", JSON.stringify(updatedUser));
+    safeSetItem("allin_session", JSON.stringify(updatedUser));
     
     if (updatedUser.role === "distributor") {
       const dProf = distributorsList.find((d) => d.customer_id === updatedUser.id) || null;
@@ -862,7 +896,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setUser(null);
     setDistributorProfile(null);
-    localStorage.removeItem("allin_session");
+    safeRemoveItem("allin_session");
     setLoading(false);
   };
 
@@ -872,7 +906,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Update session user
     const updatedUser = { ...user, ...updates };
     setUser(updatedUser);
-    localStorage.setItem("allin_session", JSON.stringify(updatedUser));
+    safeSetItem("allin_session", JSON.stringify(updatedUser));
 
     // Update in users database
     const idx = usersList.findIndex((u) => u.id === user.id);
@@ -932,7 +966,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // If active user updated themselves
     if (user.id === userId) {
       setUser({ ...user, role: targetRole });
-      localStorage.setItem("allin_session", JSON.stringify({ ...user, role: targetRole }));
+      safeSetItem("allin_session", JSON.stringify({ ...user, role: targetRole }));
     }
   };
 
@@ -988,7 +1022,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       newUsers[usersIdx] = updatedUser;
       saveUsersDB(newUsers);
       setUser(updatedUser);
-      localStorage.setItem("allin_session", JSON.stringify(updatedUser));
+      safeSetItem("allin_session", JSON.stringify(updatedUser));
     }
 
     simulateAuditLog(
@@ -1000,7 +1034,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const createAdminInvite = async (inviteInput: Omit<AdminInvite, "id" | "invite_token" | "invite_link" | "created_at" | "expires_at" | "status">): Promise<AdminInvite> => {
     const token = `inv-${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}`;
-    const inviteLink = `${window.location.origin}/auth/invite/${token}`;
+    const inviteLink = `${getOrigin()}/auth/invite/${token}`;
     const expiresAt = new Date(Date.now() + 48 * 3600000).toISOString(); // 48 hours validity
 
     const newInvite: AdminInvite = {
@@ -1054,7 +1088,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return {
           ...inv,
           invite_token: token,
-          invite_link: `${window.location.origin}/auth/invite/${token}`,
+          invite_link: `${getOrigin()}/auth/invite/${token}`,
           expires_at: new Date(Date.now() + 48 * 3600000).toISOString(),
           status: "pending" as const,
           created_at: new Date().toISOString()
