@@ -112,6 +112,14 @@ export function SidebarNav() {
       admin_master: "Admin Master",
       finance: "Diretor Financeiro",
       support: "Suporte Técnico",
+      gestão_admin: "Gestor Administrativo",
+      financeiro: "Diretor Financeiro",
+      suporte: "Gerente de Suporte",
+      logística: "Gestor Logístico",
+      marketing: "Coord. Marketing",
+      analytics: "Eng. Analytics",
+      auditor: "Auditor Estrito",
+      operador: "Operador de Staff"
     };
     return roles[role] || role;
   };

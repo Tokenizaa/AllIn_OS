@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GatewayManagement } from "@/components/payments/admin/gateway-management";
 import { BonusConfiguration } from "@/components/payments/admin/bonus-configuration";
 import { FinancialDashboard } from "@/components/payments/admin/financial-dashboard";
+import { UserManagement } from "@/components/system/user-management";
+import { InvitesManagement } from "@/components/system/invites-management";
 
 export const Route = createFileRoute("/_app/system")({ component: SystemPage });
 
@@ -19,15 +21,25 @@ const logs = Array.from({ length: 14 }).map((_, i) => ({
 function SystemPage() {
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="Sistema" title="Admin & Auditoria" subtitle="Usuários administrativos, permissões, integrações e logs de auditoria." />
+      <PageHeader eyebrow="Sistema" title="Admin & Auditoria" subtitle="Usuários administrativos, permissões, convites, integrações e logs de auditoria." />
       
-      <Tabs defaultValue="audit" className="space-y-4">
-        <TabsList>
+      <Tabs defaultValue="users" className="space-y-4">
+        <TabsList className="bg-card/40 border border-border/80 p-1 flex flex-wrap h-auto gap-0.5">
+          <TabsTrigger value="users">Gestão de Usuários</TabsTrigger>
+          <TabsTrigger value="invites">Convites Admins</TabsTrigger>
           <TabsTrigger value="audit">Audit Log</TabsTrigger>
           <TabsTrigger value="gateways">Gateways</TabsTrigger>
           <TabsTrigger value="bonus">Bônus</TabsTrigger>
           <TabsTrigger value="financeiro">Financeiro</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="users" className="space-y-4">
+          <UserManagement />
+        </TabsContent>
+
+        <TabsContent value="invites" className="space-y-4">
+          <InvitesManagement />
+        </TabsContent>
 
         <TabsContent value="audit" className="space-y-4">
           <div className="grid md:grid-cols-3 gap-3">

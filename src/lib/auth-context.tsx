@@ -3,7 +3,20 @@ import { useNavigate, useLocation } from "@tanstack/react-router";
 
 // --- TYPES & INTERFACES ---
 
-export type UserRole = "admin_master" | "finance" | "support" | "distributor" | "customer";
+export type UserRole = 
+  | "admin_master" 
+  | "finance" 
+  | "support" 
+  | "distributor" 
+  | "customer"
+  | "gestão_admin"
+  | "financeiro"
+  | "suporte"
+  | "logística"
+  | "marketing"
+  | "analytics"
+  | "auditor"
+  | "operador";
 
 export interface User {
   id: string;
@@ -19,6 +32,7 @@ export interface User {
   referral_code?: string;
   created_at: string;
   last_login?: string;
+  permissions_list?: string[]; // Custom allowed modules/actions
 }
 
 export interface DistributorProfile {
@@ -67,6 +81,24 @@ export interface Permission {
   description: string;
 }
 
+export interface AdminInvite {
+  id: string;
+  email: string;
+  full_name: string;
+  role: UserRole;
+  permissions: string[]; // custom additional modules/permissions
+  invite_token: string;
+  invite_link: string;
+  invited_by: string; // Actor who did the inviting
+  expires_at: string;
+  accepted_at?: string;
+  revoked_at?: string;
+  status: "pending" | "accepted" | "expired" | "revoked";
+  notes?: string;
+  metadata?: any;
+  created_at: string;
+}
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -75,6 +107,7 @@ interface AuthContextType {
   activeReferralMetadata: any | null;
   auditLogs: AuditLog[];
   usersList: User[];
+  adminInvites: AdminInvite[];
   login: (email: string, password: string) => Promise<User>;
   register: (name: string, email: string, role: UserRole, extra?: { phone?: string; cpf?: string; sponsor_id?: string; password?: string }) => Promise<User>;
   logout: () => Promise<void>;
@@ -86,6 +119,12 @@ interface AuthContextType {
   activateDistributorOffice: (planId: string) => Promise<void>;
   addAuditLog: (logInput: any) => void;
   triggerBinomialBonusPay: (points: number, commission: number, value: number) => Promise<void>;
+  createAdminInvite: (invite: Omit<AdminInvite, "id" | "invite_token" | "invite_link" | "created_at" | "expires_at" | "status">) => Promise<AdminInvite>;
+  revokeAdminInvite: (inviteId: string) => Promise<void>;
+  resendAdminInvite: (inviteId: string) => Promise<void>;
+  getAdminInviteByToken: (token: string) => AdminInvite | null;
+  acceptAdminInvite: (token: string, name: string, password: string) => Promise<User>;
+  deleteUserAndInviteSession: (userId: string) => void;
 }
 
 // --- DEFAULT STATE PRE-POPULATION (ENTERPRISE SIMULATOR) ---
@@ -262,6 +301,51 @@ const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   customer: [
     { id: "c1", module: "orders", action: "write", description: "Realizar compras de produtos e acompanhar pedidos" },
     { id: "c2", module: "dashboard", action: "read", description: "Acessar histórico de compras e carteira de cashback" }
+  ],
+  gestão_admin: [
+    { id: "ga1", module: "dashboard", action: "all", description: "Acesso total ao Dashboard executivo" },
+    { id: "ga2", module: "analytics", action: "all", description: "Estatísticas gerenciais completas" },
+    { id: "ga3", module: "support", action: "all", description: "Gerenciamento de tickets" },
+    { id: "ga4", module: "orders", action: "all", description: "Controle operacional de pedidos" },
+    { id: "ga5", module: "products", action: "all", description: "Catálogo de produtos" },
+    { id: "ga6", module: "marketing", action: "all", description: "Campanhas de Marketing" },
+    { id: "ga7", module: "system", action: "read", description: "Verificação de logs" }
+  ],
+  financeiro: [
+    { id: "fin1", module: "dashboard", action: "read", description: "Resumos de faturamento" },
+    { id: "fin2", module: "analytics", action: "read", description: "Painéis de faturamento e lucro" },
+    { id: "fin3", module: "finance", action: "manage", description: "Controle de saques e liquidações" },
+    { id: "fin4", module: "orders", action: "read", description: "Visualização de pedidos faturados" }
+  ],
+  suporte: [
+    { id: "sup1", module: "dashboard", action: "read", description: "Visualizar tickets de suporte" },
+    { id: "sup2", module: "support", action: "manage", description: "Responder e gerenciar tickets de suporte" },
+    { id: "sup3", module: "orders", action: "read", description: "Rastreamento e detalhes de pedidos" }
+  ],
+  logística: [
+    { id: "log1", module: "dashboard", action: "read", description: "Estatísticas de expedição" },
+    { id: "log2", module: "orders", action: "manage", description: "Controle completo de remessas e expedição" },
+    { id: "log3", module: "products", action: "read", description: "Consultar estoque e produtos" }
+  ],
+  marketing: [
+    { id: "mkt1", module: "dashboard", action: "read", description: "Visualizar dados básicos" },
+    { id: "mkt2", module: "marketing", action: "manage", description: "Gestão completa de campanhas de marketing" },
+    { id: "mkt3", module: "products", action: "read", description: "Consulta ao catálogo de produtos" }
+  ],
+  analytics: [
+    { id: "an1", module: "dashboard", action: "read", description: "Visualização de dashboards" },
+    { id: "an2", module: "analytics", action: "all", description: "Análises avançadas e relatórios enterprise" }
+  ],
+  auditor: [
+    { id: "aud1", module: "dashboard", action: "read", description: "Visualização de Auditoria" },
+    { id: "aud2", module: "analytics", action: "read", description: "Leitura de relatórios de dados" },
+    { id: "aud3", module: "finance", action: "read", description: "Auditoria de fluxos de caixa" },
+    { id: "aud4", module: "system", action: "read", description: "Auditoria estrita de logs" }
+  ],
+  operador: [
+    { id: "ope1", module: "dashboard", action: "read", description: "Dashboard operacional básico" },
+    { id: "ope2", module: "orders", action: "write", description: "Lançamento e edição operacional de pedidos" },
+    { id: "ope3", module: "support", action: "read", description: "Leitura de tickets básicos" }
   ]
 };
 
@@ -278,111 +362,249 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [distributorsList, setDistributorsList] = useState<DistributorProfile[]>([]);
   const [referralsList, setReferralsList] = useState<CustomerReferral[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [adminInvites, setAdminInvites] = useState<AdminInvite[]>([]);
+
+  console.log("[AuthProvider] Render phase. Loading:", loading, "hasUser:", !!user, "userRole:", user?.role);
+
+  const saveInvitesDB = (newInvites: AdminInvite[]) => {
+    setAdminInvites(newInvites);
+    localStorage.setItem("allin_invites", JSON.stringify(newInvites));
+  };
 
   // Init loads
   useEffect(() => {
-    // 1. Initialize Mock Database from LocalStorage (or set defaults)
-    const storedUsers = localStorage.getItem("allin_users");
-    const storedDistributors = localStorage.getItem("allin_distributors");
-    const storedReferrals = localStorage.getItem("allin_referrals");
-    const storedLogs = localStorage.getItem("allin_audit_logs");
+    console.log("[AuthProvider] Initialization useEffect started.");
+    try {
+      // 1. Initialize Mock Database from LocalStorage (or set defaults)
+      const storedUsers = localStorage.getItem("allin_users");
+      const storedDistributors = localStorage.getItem("allin_distributors");
+      const storedReferrals = localStorage.getItem("allin_referrals");
+      const storedLogs = localStorage.getItem("allin_audit_logs");
 
-    let initialUsers = DEFAULT_USERS;
-    let initialDistributors = DEFAULT_DISTRIBUTORS;
-    let initialReferrals = DEFAULT_REFERRALS;
-    let initialLogs = DEFAULT_AUDIT_LOGS;
+      let initialUsers = DEFAULT_USERS;
+      let initialDistributors = DEFAULT_DISTRIBUTORS;
+      let initialReferrals = DEFAULT_REFERRALS;
+      let initialLogs = DEFAULT_AUDIT_LOGS;
 
-    if (storedUsers) {
-      initialUsers = JSON.parse(storedUsers);
-    } else {
-      localStorage.setItem("allin_users", JSON.stringify(DEFAULT_USERS));
-    }
+      if (storedUsers) {
+        try {
+          const parsed = JSON.parse(storedUsers);
+          if (Array.isArray(parsed)) {
+            initialUsers = parsed;
+          }
+        } catch (e) {
+          console.error("Error parsing stored users, resetting:", e);
+        }
+      } else {
+        localStorage.setItem("allin_users", JSON.stringify(DEFAULT_USERS));
+      }
 
-    if (storedDistributors) {
-      initialDistributors = JSON.parse(storedDistributors);
-    } else {
-      localStorage.setItem("allin_distributors", JSON.stringify(DEFAULT_DISTRIBUTORS));
-    }
+      if (storedDistributors) {
+        try {
+          const parsed = JSON.parse(storedDistributors);
+          if (Array.isArray(parsed)) {
+            initialDistributors = parsed;
+          }
+        } catch (e) {
+          console.error("Error parsing stored distributors, resetting:", e);
+        }
+      } else {
+        localStorage.setItem("allin_distributors", JSON.stringify(DEFAULT_DISTRIBUTORS));
+      }
 
-    if (storedReferrals) {
-      initialReferrals = JSON.parse(storedReferrals);
-    } else {
-      localStorage.setItem("allin_referrals", JSON.stringify(DEFAULT_REFERRALS));
-    }
+      if (storedReferrals) {
+        try {
+          const parsed = JSON.parse(storedReferrals);
+          if (Array.isArray(parsed)) {
+            initialReferrals = parsed;
+          }
+        } catch (e) {
+          console.error("Error parsing stored referrals, resetting:", e);
+        }
+      } else {
+        localStorage.setItem("allin_referrals", JSON.stringify(DEFAULT_REFERRALS));
+      }
 
-    if (storedLogs) {
-      initialLogs = JSON.parse(storedLogs);
-    } else {
-      localStorage.setItem("allin_audit_logs", JSON.stringify(DEFAULT_AUDIT_LOGS));
-    }
+      if (storedLogs) {
+        try {
+          const parsed = JSON.parse(storedLogs);
+          if (Array.isArray(parsed)) {
+            initialLogs = parsed;
+          }
+        } catch (e) {
+          console.error("Error parsing stored audit logs, resetting:", e);
+        }
+      } else {
+        localStorage.setItem("allin_audit_logs", JSON.stringify(DEFAULT_AUDIT_LOGS));
+      }
 
-    setUsersList(initialUsers);
-    setDistributorsList(initialDistributors);
-    setReferralsList(initialReferrals);
-    setAuditLogs(initialLogs);
+      // Load or initialize admin invites
+      const storedInvites = localStorage.getItem("allin_invites");
+      let initialInvites: AdminInvite[] = [];
 
-    // 2. Fetch Session from LocalStorage
-    const savedSession = localStorage.getItem("allin_session");
-    if (savedSession) {
-      const parsedUser = JSON.parse(savedSession) as User;
-      // Fetch latest states from database
-      const liveUser = initialUsers.find((u) => u.id === parsedUser.id) || parsedUser;
-      setUser(liveUser);
+      if (storedInvites) {
+        try {
+          const parsed = JSON.parse(storedInvites);
+          if (Array.isArray(parsed)) {
+            initialInvites = parsed;
+          }
+        } catch (e) {
+          console.error("Error parsing stored invites, resetting:", e);
+        }
+      }
+
+      if (!initialInvites || initialInvites.length === 0) {
+        initialInvites = [
+          {
+            id: "invite-1",
+            email: "mariana.financeiro@allin.io",
+            full_name: "Mariana Souza",
+            role: "financeiro",
+            permissions: ["finance", "orders", "analytics"],
+            invite_token: "token-mariana-accepted",
+            invite_link: `${window.location.origin}/auth/invite/token-mariana-accepted`,
+            invited_by: "admin@allin.io",
+            expires_at: new Date(Date.now() - 5 * 24 * 3600000).toISOString(),
+            accepted_at: new Date(Date.now() - 4 * 24 * 3600000).toISOString(),
+            status: "accepted",
+            created_at: new Date(Date.now() - 5 * 24 * 3600000).toISOString()
+          },
+          {
+            id: "invite-2",
+            email: "gabriel.suporte@allin.io",
+            full_name: "Gabriel Oliveira",
+            role: "suporte",
+            permissions: ["support", "orders"],
+            invite_token: "token-suporte-gabriel",
+            invite_link: `${window.location.origin}/auth/invite/token-suporte-gabriel`,
+            invited_by: "admin@allin.io",
+            expires_at: new Date(Date.now() + 3 * 24 * 3600000).toISOString(),
+            status: "pending",
+            notes: "Contratação para suporte nível 2.",
+            created_at: new Date(Date.now() - 12 * 3600000).toISOString()
+          },
+          {
+            id: "invite-3",
+            email: "renato.logistica@allin.io",
+            full_name: "Renato Cruz",
+            role: "logística",
+            permissions: ["orders", "products"],
+            invite_token: "token-renato-expired",
+            invite_link: `${window.location.origin}/auth/invite/token-renato-expired`,
+            invited_by: "admin@allin.io",
+            expires_at: new Date(Date.now() - 1 * 24 * 3600000).toISOString(),
+            status: "expired",
+            created_at: new Date(Date.now() - 4 * 24 * 3600000).toISOString()
+          },
+          {
+            id: "invite-4",
+            email: "fernanda.marketing@allin.io",
+            full_name: "Fernanda Lima",
+            role: "marketing",
+            permissions: ["marketing"],
+            invite_token: "token-fernanda-revoked",
+            invite_link: `${window.location.origin}/auth/invite/token-fernanda-revoked`,
+            invited_by: "admin@allin.io",
+            expires_at: new Date(Date.now() + 5 * 24 * 3600000).toISOString(),
+            revoked_at: new Date(Date.now() - 1 * 24 * 3600000).toISOString(),
+            status: "revoked",
+            created_at: new Date(Date.now() - 2 * 24 * 3600000).toISOString()
+          }
+        ];
+        localStorage.setItem("allin_invites", JSON.stringify(initialInvites));
+      }
+
+      // Dynamic expiry check for all pending invites
+      const checkedInvites = initialInvites.map(inv => {
+        if (inv.status === "pending" && new Date(inv.expires_at) < new Date()) {
+          return { ...inv, status: "expired" as const };
+        }
+        return inv;
+      });
+
+      setUsersList(initialUsers);
+      setDistributorsList(initialDistributors);
+      setReferralsList(initialReferrals);
+      setAuditLogs(initialLogs);
+      setAdminInvites(checkedInvites);
+
+      // 2. Fetch Session from LocalStorage
+      const savedSession = localStorage.getItem("allin_session");
+      if (savedSession && savedSession !== "undefined") {
+        try {
+          const parsedUser = JSON.parse(savedSession) as User;
+          if (parsedUser && parsedUser.id) {
+            // Fetch latest states from database
+            const liveUser = initialUsers.find((u) => u.id === parsedUser.id) || parsedUser;
+            setUser(liveUser);
+            
+            if (liveUser.role === "distributor") {
+              const dProf = initialDistributors.find((d) => d.customer_id === liveUser.id) || null;
+              setDistributorProfile(dProf);
+            }
+          }
+        } catch (e) {
+          console.error("Error parsing saved session info:", e);
+          localStorage.removeItem("allin_session");
+        }
+      }
+
+      // 3. Process URL sponsor tracking (on load)
+      const params = new URLSearchParams(window.location.search);
+      const refParam = params.get("ref");
+      const currentPath = window.location.pathname;
       
-      if (liveUser.role === "distributor") {
-        const dProf = initialDistributors.find((d) => d.customer_id === liveUser.id) || null;
-        setDistributorProfile(dProf);
+      // Check if path is e.g. /loja/ref/marcus or if query ?ref=marcus exists
+      let potentialSponsor = refParam;
+      if (!potentialSponsor && currentPath.includes("/ref/")) {
+        const parts = currentPath.split("/ref/");
+        if (parts[1]) {
+          potentialSponsor = parts[1].split(/[/?#]/)[0]; // get pure code
+        }
       }
-    }
 
-    // 3. Process URL sponsor tracking (on load)
-    const params = new URLSearchParams(window.location.search);
-    const refParam = params.get("ref");
-    const currentPath = window.location.pathname;
-    
-    // Check if path is e.g. /loja/ref/marcus or if query ?ref=marcus exists
-    let potentialSponsor = refParam;
-    if (!potentialSponsor && currentPath.includes("/ref/")) {
-      const parts = currentPath.split("/ref/");
-      if (parts[1]) {
-        potentialSponsor = parts[1].split(/[/?#]/)[0]; // get pure code
+      if (potentialSponsor) {
+        // Clean potential code and look up active distributor
+        const cleanRef = potentialSponsor.trim().toLowerCase();
+        // Check if distributor exists with this design code (or handle dynamically/by-default)
+        const validDist = initialUsers.find(
+          (u) => (u.referral_code?.toLowerCase() === cleanRef || u.id === cleanRef) && u.role === "distributor"
+        );
+        
+        if (validDist) {
+          setActiveSponsor(validDist.referral_code || validDist.id);
+          const meta = {
+            clicked_at: new Date().toISOString(),
+            landing_url: window.location.href,
+            referrer_code: cleanRef,
+            device: typeof navigator !== "undefined" ? navigator.userAgent : "ssr"
+          };
+          setActiveReferralMetadata(meta);
+          localStorage.setItem("allin_active_ref", cleanRef);
+          localStorage.setItem("allin_active_ref_meta", JSON.stringify(meta));
+          console.log(`[Referral System] Sponsor Intercepted: active sponsor is now ${cleanRef}`);
+        }
+      } else {
+        // Check cached active sponsor
+        const cachedRef = localStorage.getItem("allin_active_ref");
+        const cachedMeta = localStorage.getItem("allin_active_ref_meta");
+        if (cachedRef) {
+          setActiveSponsor(cachedRef);
+        }
+        if (cachedMeta) {
+          try {
+            setActiveReferralMetadata(JSON.parse(cachedMeta));
+          } catch (e) {
+            localStorage.removeItem("allin_active_ref_meta");
+          }
+        }
       }
+    } catch (error) {
+      console.error("[AuthProvider] Fatal error during AuthContext initialization:", error);
+    } finally {
+      console.log("[AuthProvider] useEffect initialization completed. Setting loading state to false.");
+      setLoading(false);
     }
-
-    if (potentialSponsor) {
-      // Clean potential code and look up active distributor
-      const cleanRef = potentialSponsor.trim().toLowerCase();
-      // Check if distributor exists with this design code (or handle dynamically/by-default)
-      const validDist = initialUsers.find(
-        (u) => (u.referral_code?.toLowerCase() === cleanRef || u.id === cleanRef) && u.role === "distributor"
-      );
-      
-      if (validDist) {
-        setActiveSponsor(validDist.referral_code || validDist.id);
-        const meta = {
-          clicked_at: new Date().toISOString(),
-          landing_url: window.location.href,
-          referrer_code: cleanRef,
-          device: typeof navigator !== "undefined" ? navigator.userAgent : "ssr"
-        };
-        setActiveReferralMetadata(meta);
-        localStorage.setItem("allin_active_ref", cleanRef);
-        localStorage.setItem("allin_active_ref_meta", JSON.stringify(meta));
-        console.log(`[Referral System] Sponsor Intercepted: active sponsor is now ${cleanRef}`);
-      }
-    } else {
-      // Check cached active sponsor
-      const cachedRef = localStorage.getItem("allin_active_ref");
-      const cachedMeta = localStorage.getItem("allin_active_ref_meta");
-      if (cachedRef) {
-        setActiveSponsor(cachedRef);
-      }
-      if (cachedMeta) {
-        setActiveReferralMetadata(JSON.parse(cachedMeta));
-      }
-    }
-
-    setLoading(false);
   }, []);
 
   // Sync state helpers to persistent local db
@@ -776,6 +998,143 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   };
 
+  const createAdminInvite = async (inviteInput: Omit<AdminInvite, "id" | "invite_token" | "invite_link" | "created_at" | "expires_at" | "status">): Promise<AdminInvite> => {
+    const token = `inv-${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}`;
+    const inviteLink = `${window.location.origin}/auth/invite/${token}`;
+    const expiresAt = new Date(Date.now() + 48 * 3600000).toISOString(); // 48 hours validity
+
+    const newInvite: AdminInvite = {
+      id: `invite-${Date.now()}`,
+      email: inviteInput.email.toLowerCase().trim(),
+      full_name: inviteInput.full_name,
+      role: inviteInput.role,
+      permissions: inviteInput.permissions || [],
+      invite_token: token,
+      invite_link: inviteLink,
+      invited_by: user?.email || "admin@allin.io",
+      expires_at: expiresAt,
+      status: "pending",
+      notes: inviteInput.notes,
+      created_at: new Date().toISOString()
+    };
+
+    const updated = [newInvite, ...adminInvites];
+    saveInvitesDB(updated);
+
+    simulateAuditLog(
+      "CREATE_ADMIN_INVITE",
+      "admin_invites",
+      `Convite criado para ${newInvite.email} com a role: ${newInvite.role.toUpperCase()}.`
+    );
+
+    return newInvite;
+  };
+
+  const revokeAdminInvite = async (inviteId: string): Promise<void> => {
+    const updated = adminInvites.map(inv => {
+      if (inv.id === inviteId) {
+        return { ...inv, status: "revoked" as const, revoked_at: new Date().toISOString() };
+      }
+      return inv;
+    });
+    saveInvitesDB(updated);
+
+    const matchObj = adminInvites.find(inv => inv.id === inviteId);
+    simulateAuditLog(
+      "REVOKE_ADMIN_INVITE",
+      "admin_invites",
+      `Convite de Id: ${inviteId} (${matchObj?.email || ""}) revogado com sucesso.`
+    );
+  };
+
+  const resendAdminInvite = async (inviteId: string): Promise<void> => {
+    const updated = adminInvites.map(inv => {
+      if (inv.id === inviteId) {
+        const token = `inv-${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}`;
+        return {
+          ...inv,
+          invite_token: token,
+          invite_link: `${window.location.origin}/auth/invite/${token}`,
+          expires_at: new Date(Date.now() + 48 * 3600000).toISOString(),
+          status: "pending" as const,
+          created_at: new Date().toISOString()
+        };
+      }
+      return inv;
+    });
+    saveInvitesDB(updated);
+
+    const matchObj = adminInvites.find(inv => inv.id === inviteId);
+    simulateAuditLog(
+      "RESEND_ADMIN_INVITE",
+      "admin_invites",
+      `Convite reenviado e renovado por 48h para ${matchObj?.email || ""}.`
+    );
+  };
+
+  const getAdminInviteByToken = (token: string): AdminInvite | null => {
+    const found = adminInvites.find(inv => inv.invite_token === token);
+    if (!found) return null;
+    if (found.status === "pending" && new Date(found.expires_at) < new Date()) {
+      return { ...found, status: "expired" };
+    }
+    return found;
+  };
+
+  const acceptAdminInvite = async (token: string, name: string, password: string): Promise<User> => {
+    const invite = adminInvites.find(inv => inv.invite_token === token);
+    if (!invite) throw new Error("Convite inválido ou token inexistente.");
+
+    if (invite.status === "revoked") throw new Error("Acesso negado: Este convite foi cancelado pelo administrador.");
+    if (invite.status === "accepted") throw new Error("Acesso negado: Este convite já foi utilizado para ativar uma conta.");
+    if (new Date(invite.expires_at) < new Date()) throw new Error("Acesso negado: A validade deste convite expirou.");
+
+    const newUser: User = {
+      id: `user-admin-${Date.now()}`,
+      name: name,
+      email: invite.email,
+      role: invite.role,
+      status: "active",
+      active: true,
+      created_at: new Date().toISOString(),
+      permissions_list: invite.permissions
+    };
+
+    const updatedUsers = [...usersList, newUser];
+    saveUsersDB(updatedUsers);
+
+    const updatedInvites = adminInvites.map(inv => {
+      if (inv.invite_token === token) {
+        return { ...inv, status: "accepted" as const, accepted_at: new Date().toISOString() };
+      }
+      return inv;
+    });
+    saveInvitesDB(updatedInvites);
+
+    setUser(newUser);
+    localStorage.setItem("allin_session", JSON.stringify(newUser));
+
+    const newLog: AuditLog = {
+      id: `log-${Date.now()}`,
+      user_id: newUser.id,
+      actor: newUser.email,
+      action: "ACCEPT_INVITE",
+      entity: "admin_invites",
+      details: `Administrador ativado com sucesso: ${newUser.name} em cargo de ${newUser.role.toUpperCase()}`,
+      ip_address: "189.155.20.40",
+      tenant_id: "tenant-default",
+      created_at: new Date().toISOString()
+    };
+    saveLogsDB([newLog, ...auditLogs]);
+
+    return newUser;
+  };
+
+  const deleteUserAndInviteSession = (userId: string) => {
+    const filteredUsers = usersList.filter(u => u.id !== userId);
+    saveUsersDB(filteredUsers);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -786,6 +1145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         activeReferralMetadata,
         auditLogs,
         usersList,
+        adminInvites,
         login,
         register,
         logout,
@@ -796,7 +1156,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         clearSponsor,
         activateDistributorOffice,
         addAuditLog,
-        triggerBinomialBonusPay
+        triggerBinomialBonusPay,
+        createAdminInvite,
+        revokeAdminInvite,
+        resendAdminInvite,
+        getAdminInviteByToken,
+        acceptAdminInvite,
+        deleteUserAndInviteSession
       }}
     >
       {children}
@@ -852,9 +1218,13 @@ export const RouteGuard: React.FC<GuardProps> = ({ children, allowedRoles, requi
   const navigate = useNavigate();
   const location = useLocation();
 
+  console.log("[RouteGuard] Render. path:", location.pathname, "loading:", loading, "hasUser:", !!user, "userRole:", user?.role, "allowedRoles:", allowedRoles);
+
   useEffect(() => {
+    console.log("[RouteGuard] useEffect fired. path:", location.pathname, "loading:", loading, "hasUser:", !!user, "userRole:", user?.role);
     if (!loading) {
       if (!user) {
+        console.log("[RouteGuard] No user found. Redirecting to /login from:", location.pathname);
         // Redirect to Login page and preserve return url
         navigate({
           to: "/login",
@@ -865,6 +1235,7 @@ export const RouteGuard: React.FC<GuardProps> = ({ children, allowedRoles, requi
 
       // Check role permissions
       if (allowedRoles && !allowedRoles.includes(user.role)) {
+        console.log("[RouteGuard] Role mismatch! user.role:", user.role, "is not in:", allowedRoles);
         // Role mismatch redirect to their respective primary view
         if (user.role === "distributor") {
           navigate({ to: "/office" });
@@ -878,6 +1249,7 @@ export const RouteGuard: React.FC<GuardProps> = ({ children, allowedRoles, requi
 
       // Check specific modular permission
       if (requiredPermission && !hasPermission(requiredPermission.module, requiredPermission.action || "read")) {
+        console.log("[RouteGuard] Missing permission. module:", requiredPermission.module, "action:", requiredPermission.action);
         // No permission error card redirect or similar
         navigate({ to: "/" });
       }
@@ -885,6 +1257,7 @@ export const RouteGuard: React.FC<GuardProps> = ({ children, allowedRoles, requi
   }, [user, loading, allowedRoles, requiredPermission, navigate, location.pathname]);
 
   if (loading) {
+    console.log("[RouteGuard] Still loading, showing loader spinner.");
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#07090e] text-white">
         <div className="relative flex items-center justify-center">
