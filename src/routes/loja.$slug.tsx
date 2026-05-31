@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { createFileRoute, Link, useNavigate, useParams, useLocation } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useDistributor } from "@/lib/distributor-context";
-import { products, formatBRL } from "@/lib/mock-data";
+import { useProducts } from "@/contexts/ProductsContext";
 import { 
   ShoppingBag, Trash2, Heart, Plus, Minus, QrCode, 
   CreditCard, ShieldCheck, ArrowRight, ArrowLeft, CheckCircle2,
@@ -18,11 +18,17 @@ export const Route = createFileRoute("/loja/$slug")({
   component: DistributorStorePage,
 });
 
-export function DistributorStorePage() {
+function DistributorStorePage() {
   const params = useParams({ strict: false }) as { slug?: string };
   const { currentDistributor, setDistributorBySlug } = useDistributor();
   const navigate = useNavigate();
   const { usersList, triggerBinomialBonusPay, addAuditLog } = useAuth();
+  const { products } = useProducts();
+
+  const formatBRL = (value: string) => {
+    const num = parseFloat(value);
+    return num.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  };
   
   const routeSlug = params.slug?.toLowerCase().trim();
   
@@ -135,7 +141,7 @@ export function DistributorStorePage() {
 
   const clearCart = () => saveCart([]);
 
-  const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+  const subtotal = cart.reduce((acc, item) => acc + (parseFloat(item.product.price) * item.quantity), 0);
   const deliveryCost = subtotal > 300 || subtotal === 0 ? 0 : 25.00;
   const finalTotal = Math.max(0, subtotal - discount + deliveryCost);
 
@@ -176,7 +182,7 @@ export function DistributorStorePage() {
         }, 0);
 
         const totalCommission = cart.reduce((acc, item) => {
-          const comm = (item.product.price * 0.25) * item.quantity; // 25% direct margin commission for sponsor
+          const comm = (parseFloat(item.product.price) * 0.25) * item.quantity; // 25% direct margin commission for sponsor
           return acc + comm;
         }, 0);
 
@@ -271,25 +277,21 @@ export function DistributorStorePage() {
                     >
                       <div className="relative">
                         <img
-                          src={prod.id === "prd_1" ? "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400" :
-                               prod.id === "prd_2" ? "https://images.unsplash.com/photo-1512152272829-e3139592d56f?auto=format&fit=crop&q=80&w=400" :
-                               prod.id === "prd_3" ? "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?auto=format&fit=crop&q=80&w=400" :
-                               "https://images.unsplash.com/photo-1626847037657-fd3622613ce3?auto=format&fit=crop&q=80&w=400"}
-                          alt={prod.name}
+                          src={prod.imgSrc}
+                          alt={prod.caption}
                           className="w-full h-48 object-cover rounded-xl"
                         />
                         <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                           <span className="text-[8px] font-bold font-mono text-emerald-400 bg-background/90 px-2 py-0.5 rounded-md border border-emerald-500/25 uppercase">
-                            {prod.category}
+                            {prod.categorias}
                           </span>
                         </div>
                       </div>
 
                       <div className="p-4 space-y-4 flex-1 flex flex-col justify-between">
                         <div className="space-y-1">
-                          <h3 className="text-xs font-bold font-mono text-zinc-500 uppercase tracking-widest">{prod.sku}</h3>
-                          <h3 className="text-sm font-bold text-white line-clamp-1 leading-snug">{prod.name}</h3>
-                          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 mt-1">{prod.description}</p>
+                          <h3 className="text-sm font-bold text-white line-clamp-1 leading-snug">{prod.caption}</h3>
+                          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 mt-1">{prod.caption2}</p>
                         </div>
 
                         <div className="space-y-3 pt-3 border-t border-border/20">
@@ -584,8 +586,8 @@ export function DistributorStorePage() {
                       {cart.map((item) => (
                         <div key={item.product.id} className="flex gap-2.5 items-center pt-2.5 first:pt-0 text-xs">
                           <span className="font-bold text-emerald-400 font-mono text-[11px] shrink-0">x{item.quantity}</span>
-                          <span className="text-white font-medium truncate flex-1">{item.product.name}</span>
-                          <span className="font-mono text-zinc-400 shrink-0">{formatBRL(item.product.price * item.quantity)}</span>
+                          <span className="text-white font-medium truncate flex-1">{item.product.caption}</span>
+                          <span className="font-mono text-zinc-400 shrink-0">{formatBRL(item.product.price)}</span>
                         </div>
                       ))}
                     </div>

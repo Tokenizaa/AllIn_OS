@@ -33,9 +33,14 @@ function LoginPage() {
         navigate({ to: "/office" });
       }
     } else if (currentUser.role === "customer") {
-      navigate({ to: "/office/store" }); // Redirect customers to virtual store product panel
+      navigate({ to: "/loja" }); // Redirect customers to store
+    } else if (currentUser.role === "admin_master" || currentUser.role === "admin") {
+      navigate({ to: "/_app" }); // Admin dashboard
+    } else if (currentUser.role === "financeiro") {
+      navigate({ to: "/_app/wallets" }); // Finance dashboard
+    } else if (currentUser.role === "suporte") {
+      navigate({ to: "/_app/customers" }); // Support dashboard
     } else {
-      // admin, finance, support
       navigate({ to: "/" });
     }
   };
@@ -94,30 +99,30 @@ function LoginPage() {
         <div className="space-y-6 my-auto max-w-md">
           <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold bg-primary/15 text-primary border border-primary/20">
             <Sparkles className="h-3 w-3 animate-pulse" />
-            Operação Unificada Global
+            Plataforma AllIn
           </span>
           <h1 className="text-4xl font-extrabold tracking-tight leading-tight text-white font-sans [text-shadow:0_2px_10px_rgba(0,0,0,0.5)]">
-            A infraestrutura inteligente para operações MLM & SaaS.
+            Calçados terapêuticos que transformam vidas.
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Gerencie redes de distribuição de alta velocidade, calcule bônus em tempo real e integre comércio inteligente com auditoria de dados imutável.
+            Tecnologia exclusiva para alívio de dores, melhora da circulação e qualidade de vida. Gerencie sua rede de distribuição e acompanhe seus resultados em tempo real.
           </p>
 
           <div className="space-y-3.5 pt-4">
             <div className="flex items-start gap-3">
               <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-              <p className="text-xs text-muted-foreground"><strong className="text-foreground">RBAC Granular:</strong> Permissões limitadas e perfis independentes para suporte, financeiro e distribuidores.</p>
+              <p className="text-xs text-muted-foreground"><strong className="text-foreground">Tecnologia Avançada:</strong> Magnetoterapia, infravermelho e tecido respirável para máximo conforto.</p>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-              <p className="text-xs text-muted-foreground"><strong className="text-foreground">RLS Native:</strong> Políticas de Row-Level Security que garantem isolamento hierárquico absoluto.</p>
+              <p className="text-xs text-muted-foreground"><strong className="text-foreground">Oportunidade Real:</strong> Construa sua rede de distribuição com suporte completo e bônus transparentes.</p>
             </div>
           </div>
         </div>
 
         <div className="text-xs text-muted-foreground flex items-center gap-2 font-mono">
           <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          Servidor Conectado • SSL v3.4 Encrypted
+          Plataforma Online • Segurança Garantida
         </div>
       </div>
 
@@ -137,8 +142,8 @@ function LoginPage() {
               </div>
             )}
 
-            <h2 className="text-2xl font-bold tracking-tight text-white font-sans">Acesse o Allin OS</h2>
-            <p className="text-xs text-muted-foreground">Insira as credenciais corporativas ou escolha um perfil demo abaixo.</p>
+            <h2 className="text-2xl font-bold tracking-tight text-white font-sans">Acesse sua conta AllIn</h2>
+            <p className="text-xs text-muted-foreground">Entre com suas credenciais ou teste a plataforma com os perfis demo abaixo.</p>
           </div>
 
           {/* Form */}
@@ -150,19 +155,19 @@ function LoginPage() {
           >
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">E-mail corporativo</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">E-mail</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full h-10 px-3.5 rounded-lg border border-border/60 bg-background/50 text-sm placeholder-muted-foreground focus:outline-none focus:border-primary/80 transition-all text-white font-mono"
-                  placeholder="admin@allin.io"
+                  placeholder="seu@email.com"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">Chave de acesso</label>
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block">Senha</label>
                   <Link to="/recuperar-senha" className="text-[11px] text-primary hover:underline font-semibold">Esqueceu a senha?</Link>
                 </div>
                 <div className="relative">
@@ -216,13 +221,13 @@ function LoginPage() {
 
             <div className="relative flex py-1 items-center">
               <div className="flex-grow border-t border-border/50"></div>
-              <span className="flex-shrink mx-3 text-[10px] text-muted-foreground/60 uppercase font-mono">Enterprise Demo Access</span>
+              <span className="flex-shrink mx-3 text-[10px] text-muted-foreground/60 uppercase font-mono">Acesso Demo</span>
               <div className="flex-grow border-t border-border/50"></div>
             </div>
 
             {/* Quick Demo Selector */}
             <div className="space-y-2">
-              <p className="text-[10px] text-center text-muted-foreground block font-semibold uppercase tracking-wider">Selecione uma Role de simulação:</p>
+              <p className="text-[10px] text-center text-muted-foreground block font-semibold uppercase tracking-wider">Selecione um perfil para testar:</p>
               <div className="grid grid-cols-2 gap-1.5">
                 <button
                   onClick={() => handleQuickLogin("admin@allin.io", "admin123", "Admin Master")}
@@ -232,18 +237,18 @@ function LoginPage() {
                   <span className="truncate">Admin Master</span>
                 </button>
                 <button
-                  onClick={() => handleQuickLogin("finance@allin.io", "finance123", "Financeiro")}
+                  onClick={() => handleQuickLogin("financeiro@allin.io", "finance123", "Financeiro")}
                   className="flex items-center gap-1.5 p-1.5 text-[11px] text-left border border-border/40 hover:border-primary/40 bg-background/25 rounded-md transition-colors text-white"
                 >
                   <Wallet className="h-3 w-3 text-primary shrink-0" />
-                  <span className="truncate">Gestão Finanças</span>
+                  <span className="truncate">Financeiro</span>
                 </button>
                 <button
-                  onClick={() => handleQuickLogin("support@allin.io", "support123", "Suporte")}
+                  onClick={() => handleQuickLogin("suporte@allin.io", "support123", "Suporte")}
                   className="flex items-center gap-1.5 p-1.5 text-[11px] text-left border border-border/40 hover:border-primary/40 bg-background/25 rounded-md transition-colors text-white"
                 >
                   <Headphones className="h-3 w-3 text-cyan-400 shrink-0" />
-                  <span className="truncate">Suporte Técnico</span>
+                  <span className="truncate">Suporte</span>
                 </button>
                 <button
                   onClick={() => handleQuickLogin("distributor@allin.io", "distributor123", "Distribuidor")}
@@ -259,15 +264,15 @@ function LoginPage() {
                 className="w-full flex items-center justify-center gap-1.5 p-1.5 text-[11px] border border-border/40 hover:border-primary/40 bg-background/25 rounded-md transition-colors text-white"
               >
                 <Users className="h-3 w-3 text-emerald-400 shrink-0" />
-                <span>Cliente Final (Simulação de Checkout e Referral)</span>
+                <span>Cliente (Loja Virtual)</span>
               </button>
             </div>
           </motion.div>
 
           {/* Footer Text */}
           <p className="text-center text-xs text-muted-foreground">
-            Novo distribuidor?{" "}
-            <Link to="/cadastro" className="text-primary hover:underline font-semibold">Criar Conta Comercial</Link>
+            Ainda não tem conta?{" "}
+            <Link to="/seja-distribuidor" className="text-primary hover:underline font-semibold">Seja um Distribuidor</Link>
           </p>
         </div>
       </div>

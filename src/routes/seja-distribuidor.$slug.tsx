@@ -17,7 +17,7 @@ export const Route = createFileRoute("/seja-distribuidor/$slug")({
   component: DistributorRecruitmentPage,
 });
 
-export function DistributorRecruitmentPage() {
+function DistributorRecruitmentPage() {
   const params = useParams({ strict: false }) as { slug?: string };
   const { currentDistributor, setDistributorBySlug } = useDistributor();
   const navigate = useNavigate();

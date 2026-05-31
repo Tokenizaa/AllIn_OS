@@ -30,11 +30,9 @@ export interface FilterParams {
   [key: string]: any;
 }
 
-export enum UserRole {
-  ADMIN = 'admin',
-  OPERATOR = 'operator',
-  DISTRIBUTOR = 'distributor',
-}
+// Import centralized role definitions from shared/types/roles.ts
+// This ensures consistency between frontend and backend
+export { UserRole, isAdministrativeRole, isDepartmentalRole, isBusinessRole, isValidRole } from '../../../shared/types/roles';
 
 export enum Permission {
   CUSTOMERS_READ = 'customers:read',

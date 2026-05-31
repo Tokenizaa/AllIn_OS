@@ -202,7 +202,21 @@ export const DistributorProvider: React.FC<{ children: React.ReactNode; initialS
 export const useDistributor = () => {
   const context = useContext(DistributorContext);
   if (!context) {
-    throw new Error("useDistributor must be used within a DistributorProvider");
+    // Return safe default instead of throwing to prevent app crash
+    console.warn('DistributorProvider not found, using default distributor');
+    return {
+      currentDistributor: {
+        slug: DEFAULT_DISTRIBUTOR,
+        name: "All-In Brasil",
+        rank: "Distribuidor Master Global",
+        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=allinBrasil",
+        theme: DEFAULT_THEME,
+        isFallback: true
+      },
+      setDistributorBySlug: () => {
+        console.warn('DistributorProvider not found, distributor update ignored');
+      }
+    };
   }
   return context;
 };

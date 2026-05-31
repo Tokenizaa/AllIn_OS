@@ -16,6 +16,10 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        hero: "bg-allin-orange text-allin-dark font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 hover:bg-allin-orange/90",
+        cta: "bg-allin-orange text-allin-dark font-semibold px-8 py-4 text-lg rounded-full shadow-2xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 hover:bg-allin-orange/90",
+        vibrant: "bg-allin-orange text-allin-dark font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 hover:bg-allin-orange/90 dark:bg-allin-orange dark:text-allin-dark dark:hover:bg-allin-orange/80 dark:hover:shadow-2xl",
+        vibrantOutline: "border-2 border-allin-orange text-allin-orange hover:bg-allin-orange/10 font-semibold dark:border-allin-bg-dark-2 dark:text-allin-orange dark:hover:bg-allin-orange/20",
       },
       size: {
         default: "h-9 px-4 py-2",

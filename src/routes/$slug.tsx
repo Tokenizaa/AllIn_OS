@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useDistributor } from "@/lib/distributor-context";
-import { products, formatBRL } from "@/lib/mock-data";
+import { useProducts } from "@/contexts/ProductsContext";
 import { 
   Crown, Phone, Star, Sparkles, ShoppingBag, Globe, 
   ArrowRight, MessageSquare, Instagram, ShieldCheck, 
@@ -17,11 +17,17 @@ export const Route = createFileRoute("/$slug")({
   component: DistributorPage,
 });
 
-export function DistributorPage() {
+function DistributorPage() {
   const params = useParams({ strict: false }) as { slug?: string };
   const { currentDistributor, setDistributorBySlug } = useDistributor();
   const navigate = useNavigate();
   const { register, usersList } = useAuth();
+  const { products } = useProducts();
+
+  const formatBRL = (value: string) => {
+    const num = parseFloat(value);
+    return num.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  };
   
   // Clean parameter and sync
   const routeSlug = params.slug?.toLowerCase().trim();
@@ -234,23 +240,20 @@ export function DistributorPage() {
               >
                 <div className="relative">
                   <img
-                    src={prod.id === "prd_1" ? "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400" :
-                         prod.id === "prd_2" ? "https://images.unsplash.com/photo-1512152272829-e3139592d56f?auto=format&fit=crop&q=80&w=400" :
-                         prod.id === "prd_3" ? "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?auto=format&fit=crop&q=80&w=400" :
-                         "https://images.unsplash.com/photo-1626847037657-fd3622613ce3?auto=format&fit=crop&q=80&w=400"}
-                    alt={prod.name}
+                    src={prod.imgSrc}
+                    alt={prod.caption}
                     referrerPolicy="no-referrer"
                     className="w-full h-44 object-cover rounded-xl opacity-80"
                   />
                   <span className="absolute top-2 right-2 text-[9px] font-bold font-mono tracking-wider text-emerald-400 bg-[#06080d]/90 px-2 py-0.5 rounded-md uppercase border border-emerald-500/25">
-                    {prod.category}
+                    {prod.categorias}
                   </span>
                 </div>
                 
                 <div className="p-4 space-y-3.5 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-sm font-bold text-white line-clamp-1 leading-snug">{prod.name}</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 mt-1">{prod.description}</p>
+                    <h3 className="text-sm font-bold text-white line-clamp-1 leading-snug">{prod.caption}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 mt-1">{prod.caption2}</p>
                   </div>
 
                   <div className="space-y-2 pt-2 border-t border-border/20">

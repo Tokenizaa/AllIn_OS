@@ -169,3 +169,289 @@
   }
   .text-balance { text-wrap: balance; }
 }
+
+/* AllIn Brand Colors - HSL format for consistency with @_legado */
+:root {
+  --allin-orange: 39 95% 48%;
+  --allin-dark: 0 0% 4%;
+  --allin-white: 0 0% 100%;
+  --allin-black: 0 0% 0%;
+  --allin-bg-light-1: 0 0% 98%;
+  --allin-bg-light-2: 45 15% 94%;
+  --allin-bg-light-3: 210 20% 96%;
+  --allin-bg-dark-1: 220 20% 15%;
+  --allin-bg-dark-2: 220 15% 22%;
+  --allin-bg-dark-3: 220 15% 28%;
+}
+
+.dark {
+  --allin-orange: 39 95% 55%;
+  --allin-dark: 0 0% 95%;
+  --allin-black: 220 20% 15%;
+}
+
+/* AllIn Utility Classes - Glassmorphism from @_legado */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid hsl(var(--allin-orange) / 0.2);
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s;
+}
+
+.glass-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.dark .glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid hsl(var(--allin-orange) / 0.25);
+}
+
+.glass-button {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-0.125rem);
+}
+
+.dark .glass-button {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.dark .glass-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.glass-card-orange {
+  background: hsl(var(--allin-orange) / 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid hsl(var(--allin-orange) / 0.2);
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s;
+}
+
+.glass-card-orange:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* AllIn Animations */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(var(--allin-orange) / 0.5); }
+  50% { box-shadow: 0 0 40px hsl(var(--allin-orange) / 0.8); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Gradient utilities from @_legado */
+.gradient-primary {
+  background: linear-gradient(135deg, hsl(var(--allin-orange)), hsl(var(--allin-orange) / 0.8));
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, hsl(var(--allin-orange)), hsl(220 20% 25%));
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+}
+
+.gradient-card {
+  background: linear-gradient(135deg, hsl(var(--allin-bg-dark-1)), hsl(var(--allin-bg-dark-2)));
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, hsl(var(--allin-orange)), hsl(220 20% 50%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Chat specific styles from @_legado */
+.chat-bubble-user {
+  background: linear-gradient(135deg, hsl(var(--allin-orange)), hsl(220 20% 50%));
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  max-width: 16rem;
+}
+
+.chat-bubble-ai {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  max-width: 16rem;
+}
+
+/* Additional AllIn color utilities from @_legado */
+.allin-orange {
+  color: hsl(var(--allin-orange));
+}
+
+.bg-allin-orange {
+  background-color: hsl(var(--allin-orange));
+}
+
+.text-allin-orange {
+  color: hsl(var(--allin-orange));
+}
+
+.border-allin-orange {
+  border-color: hsl(var(--allin-orange));
+}
+
+.allin-dark {
+  color: hsl(var(--allin-dark));
+}
+
+.bg-allin-dark {
+  background-color: hsl(var(--allin-dark));
+}
+
+.text-allin-dark {
+  color: hsl(var(--allin-dark));
+}
+
+.border-allin-dark {
+  border-color: hsl(var(--allin-dark));
+}
+
+.allin-white {
+  color: hsl(var(--allin-white));
+}
+
+.bg-allin-white {
+  background-color: hsl(var(--allin-white));
+}
+
+.text-allin-white {
+  color: hsl(var(--allin-white));
+}
+
+.border-allin-white {
+  border-color: hsl(var(--allin-white));
+}
+
+.allin-black {
+  color: hsl(var(--allin-black));
+}
+
+.bg-allin-black {
+  background-color: hsl(var(--allin-black));
+}
+
+.text-allin-black {
+  color: hsl(var(--allin-black));
+}
+
+.border-allin-black {
+  border-color: hsl(var(--allin-black));
+}
+
+/* Background variant utilities */
+.bg-allin-bg-light-1 {
+  background-color: hsl(var(--allin-bg-light-1));
+}
+
+.bg-allin-bg-light-2 {
+  background-color: hsl(var(--allin-bg-light-2));
+}
+
+.bg-allin-bg-light-3 {
+  background-color: hsl(var(--allin-bg-light-3));
+}
+
+.dark .dark\:bg-allin-bg-dark-1 {
+  background-color: hsl(var(--allin-bg-dark-1));
+}
+
+.dark .dark\:bg-allin-bg-dark-2 {
+  background-color: hsl(var(--allin-bg-dark-2));
+}
+
+.dark .dark\:bg-allin-bg-dark-3 {
+  background-color: hsl(var(--allin-bg-dark-3));
+}
+
+.dark .dark\:bg-allin-dark {
+  background-color: hsl(var(--allin-dark));
+}
+
+.dark .dark\:text-allin-white {
+  color: hsl(var(--allin-white));
+}
+
+.dark .dark\:border-allin-orange {
+  border-color: hsl(var(--allin-orange));
+}
+
+/* Text on orange in dark mode */
+.dark .bg-allin-orange .text-allin-white,
+.dark .bg-allin-orange *[class*="text-allin-white"] {
+  color: hsl(var(--allin-bg-dark-1)) !important;
+}
+
+.text-allin-bg-dark-1 {
+  color: hsl(var(--allin-bg-dark-1));
+}
+
+.text-on-orange-dark {
+  color: hsl(var(--allin-white));
+}
+
+.dark .text-on-orange-dark {
+  color: hsl(var(--allin-bg-dark-1));
+}

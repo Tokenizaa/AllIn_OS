@@ -9,7 +9,7 @@ export const Route = createFileRoute("/office")({
 
 function OfficeLayoutSecure() {
   return (
-    <RouteGuard allowedRoles={["distributor", "customer"]}>
+    <RouteGuard allowedRoles={["distributor", "customer", "admin_master", "admin", "financeiro", "suporte"]}>
       <OfficeLayout />
     </RouteGuard>
   );

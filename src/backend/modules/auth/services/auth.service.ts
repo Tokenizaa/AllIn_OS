@@ -1,6 +1,7 @@
 import { jwtSign, jwtVerify } from "jsonwebtoken";
 import { LoginDto, RegisterDto, RefreshTokenDto, ChangePasswordDto, AuthResponse } from "../dto/auth.dto";
 import { CustomerRepository } from "../../customers/repositories/customer.repository";
+import { ProfileRepository } from "../../profiles/repositories/profile.repository";
 import { UserRole } from "../../../shared/types/common.types";
 
 // In production, these should be in environment variables
@@ -11,9 +12,11 @@ const JWT_REFRESH_EXPIRES_IN = "7d";
 
 export class AuthService {
   private customerRepository: CustomerRepository;
+  private profileRepository: ProfileRepository;
 
   constructor() {
     this.customerRepository = new CustomerRepository();
+    this.profileRepository = new ProfileRepository();
   }
 
   async login(dto: LoginDto): Promise<AuthResponse> {
@@ -30,8 +33,12 @@ export class AuthService {
     //   throw new Error("Invalid credentials");
     // }
 
-    // Generate tokens
-    const accessToken = this.generateAccessToken(customer.id, customer.email, "distributor");
+    // Get user role from profiles table (NOT from customers)
+    const profile = await this.profileRepository.findByUserId(customer.id);
+    const role = profile?.role || UserRole.CLIENTE_FINAL;
+
+    // Generate tokens with role from profiles
+    const accessToken = this.generateAccessToken(customer.id, customer.email, role);
     const refreshToken = this.generateRefreshToken(customer.id);
 
     return {
@@ -39,7 +46,7 @@ export class AuthService {
         id: customer.id,
         name: customer.name,
         email: customer.email,
-        role: "distributor", // In production, get from database
+        role: role, // Role from profiles table
       },
       accessToken,
       refreshToken,
@@ -77,8 +84,22 @@ export class AuthService {
       updated_at: new Date().toISOString(),
     });
 
-    // Generate tokens
-    const accessToken = this.generateAccessToken(customer.id, customer.email, "distributor");
+    // Create profile with default role (cliente_final)
+    // This can be overridden based on business logic later
+    await this.profileRepository.create({
+      user_id: customer.id,
+      name: customer.name,
+      email: customer.email,
+      role: UserRole.CLIENTE_FINAL,
+      status: "active",
+    });
+
+    // Get user role from profiles table
+    const profile = await this.profileRepository.findByUserId(customer.id);
+    const role = profile?.role || UserRole.CLIENTE_FINAL;
+
+    // Generate tokens with role from profiles
+    const accessToken = this.generateAccessToken(customer.id, customer.email, role);
     const refreshToken = this.generateRefreshToken(customer.id);
 
     return {
@@ -86,7 +107,7 @@ export class AuthService {
         id: customer.id,
         name: customer.name,
         email: customer.email,
-        role: "distributor",
+        role: role, // Role from profiles table
       },
       accessToken,
       refreshToken,
@@ -105,8 +126,12 @@ export class AuthService {
         throw new Error("Invalid refresh token");
       }
 
-      // Generate new tokens
-      const accessToken = this.generateAccessToken(customer.id, customer.email, "distributor");
+      // Get user role from profiles table (NOT from customers)
+      const profile = await this.profileRepository.findByUserId(customer.id);
+      const role = profile?.role || UserRole.CLIENTE_FINAL;
+
+      // Generate new tokens with role from profiles
+      const accessToken = this.generateAccessToken(customer.id, customer.email, role);
       const refreshToken = this.generateRefreshToken(customer.id);
 
       return {
@@ -114,7 +139,7 @@ export class AuthService {
           id: customer.id,
           name: customer.name,
           email: customer.email,
-          role: "distributor",
+          role: role, // Role from profiles table
         },
         accessToken,
         refreshToken,

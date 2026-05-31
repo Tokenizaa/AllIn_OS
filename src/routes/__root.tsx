@@ -4,13 +4,17 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
-  ScrollRestoration,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 
 import { AuthProvider } from "../lib/auth-context";
 import { DistributorProvider } from "../lib/distributor-context";
+import { StoreSettingsProvider } from "../contexts/StoreSettingsContext";
+import { CartProvider } from "../contexts/CartContext";
+import { ProductsProvider } from "../contexts/ProductsContext";
+import { StyleProvider } from "../contexts/StyleContext";
+import { ThemeProvider } from "../components/ThemeProvider";
 import "../styles.css";
 
 function NotFoundComponent() {
@@ -88,12 +92,21 @@ function RootComponent() {
       </head>
       <body className="dark bg-[#06080d] text-white">
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <DistributorProvider>
-              <Outlet />
-              <ScrollRestoration />
-            </DistributorProvider>
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <DistributorProvider>
+                <StoreSettingsProvider>
+                  <CartProvider>
+                    <ProductsProvider>
+                      <StyleProvider>
+                        <Outlet />
+                      </StyleProvider>
+                    </ProductsProvider>
+                  </CartProvider>
+                </StoreSettingsProvider>
+              </DistributorProvider>
+            </AuthProvider>
+          </ThemeProvider>
         </QueryClientProvider>
         <Scripts />
       </body>

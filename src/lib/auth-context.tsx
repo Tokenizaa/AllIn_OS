@@ -1172,7 +1172,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth deve ser usado dentro de um AuthProvider");
+  if (!context) {
+    // Return safe default instead of throwing to prevent app crash
+    console.warn('AuthProvider not found, using default auth state');
+    return {
+      user: null,
+      loading: false,
+      distributorProfile: null,
+      activeSponsor: null,
+      activeReferralMetadata: null,
+      auditLogs: [],
+      usersList: DEFAULT_USERS,
+      adminInvites: [],
+      login: async () => { throw new Error('AuthProvider not found'); },
+      register: async () => { throw new Error('AuthProvider not found'); },
+      logout: async () => { throw new Error('AuthProvider not found'); },
+      updateProfile: async () => { throw new Error('AuthProvider not found'); },
+      updateDistributorProfile: async () => { throw new Error('AuthProvider not found'); },
+      changeUserRole: async () => { throw new Error('AuthProvider not found'); },
+      simulateAuditLog: () => {},
+      clearSponsor: () => {},
+      activateDistributorOffice: async () => { throw new Error('AuthProvider not found'); },
+      addAuditLog: () => {},
+      triggerBinomialBonusPay: async () => { throw new Error('AuthProvider not found'); },
+      createAdminInvite: async () => { throw new Error('AuthProvider not found'); },
+      revokeAdminInvite: async () => { throw new Error('AuthProvider not found'); },
+      resendAdminInvite: async () => { throw new Error('AuthProvider not found'); },
+      getAdminInviteByToken: () => null,
+      acceptAdminInvite: async () => { throw new Error('AuthProvider not found'); },
+      deleteUserAndInviteSession: () => {},
+    };
+  }
   return context;
 };
 
