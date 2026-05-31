@@ -4,6 +4,7 @@ import { SidebarNav } from "@/components/app/sidebar-nav";
 import { Topbar } from "@/components/app/topbar";
 import { CopilotDrawer } from "@/components/app/copilot-drawer";
 import { RouteGuard, useAuth } from "@/lib/auth-context";
+import { UserRole } from "@/shared/types/roles";
 
 export const Route = createFileRoute("/_app")({
   component: AppLayoutSecure,
@@ -21,7 +22,7 @@ function AppLayoutSecure() {
     );
   }
 
-  const isSpecialAdmin = user && ["admin_master", "admin", "financeiro", "suporte"].includes(user.role);
+  const isSpecialAdmin = user && [UserRole.ADMIN_MASTER, UserRole.GESTAO_ADMIN, UserRole.FINANCEIRO, UserRole.SUPORTE].includes(user.role);
   
   if (location.pathname === "/" && !isSpecialAdmin) {
     return (
@@ -36,7 +37,7 @@ function AppLayoutSecure() {
   }
 
   return (
-    <RouteGuard allowedRoles={["admin_master", "admin", "financeiro", "suporte"]}>
+    <RouteGuard allowedRoles={[UserRole.ADMIN_MASTER, UserRole.GESTAO_ADMIN, UserRole.FINANCEIRO, UserRole.SUPORTE]}>
       <AppLayout />
     </RouteGuard>
   );

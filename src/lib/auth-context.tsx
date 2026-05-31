@@ -1,22 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
+import { UserRole } from "../shared/types/roles";
 
 // --- TYPES & INTERFACES ---
-
-export type UserRole = 
-  | "admin_master" 
-  | "finance" 
-  | "support" 
-  | "distributor" 
-  | "customer"
-  | "gestão_admin"
-  | "financeiro"
-  | "suporte"
-  | "logística"
-  | "marketing"
-  | "analytics"
-  | "auditor"
-  | "operador";
 
 export interface User {
   id: string;
@@ -1267,9 +1253,9 @@ export const RouteGuard: React.FC<GuardProps> = ({ children, allowedRoles, requi
       if (allowedRoles && !allowedRoles.includes(user.role)) {
         console.log("[RouteGuard] Role mismatch! user.role:", user.role, "is not in:", allowedRoles);
         // Role mismatch redirect to their respective primary view
-        if (user.role === "distributor") {
+        if (user.role === UserRole.DISTRIBUIDOR) {
           navigate({ to: "/office" });
-        } else if (user.role === "customer") {
+        } else if (user.role === UserRole.CLIENTE_FINAL) {
           navigate({ to: "/store" });
         } else {
           navigate({ to: "/" });
